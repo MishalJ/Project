@@ -12,17 +12,17 @@
         }
 
         body {
-            /* Dynamic Animated Gradient Background */
-            background: linear-gradient(45deg, #ff9a9e, #fecfef, #fdfbfb, #ebedee);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            /* Elegant, softer animated gradient */
+            background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%, #fecfef 50%, #ff9a9e 100%);
+            background-size: 300% 300%;
+            animation: gradientBG 20s ease infinite;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Georgia', serif; /* Switch to serif for more elegance */
             overflow: hidden;
             text-align: center;
         }
@@ -33,75 +33,64 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Particle animations (Hearts, Petals, Eggs) */
-        .particle {
+        /* Romantic Ambient Animations */
+        .bokeh {
             position: absolute;
-            pointer-events: none;
-            opacity: 0.6;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            0% { transform: translateY(-10vh) rotate(0deg) scale(0.8); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(110vh) rotate(360deg) scale(1.2); opacity: 0; }
-        }
-
-        /* Walking Animals Background */
-        .walking-animal {
-            position: absolute;
-            font-size: 40px;
-            white-space: nowrap;
-            animation: walkAcross 15s linear forwards;
-            z-index: 1; /* Behind the container */
-            opacity: 0.85;
-        }
-
-        @keyframes walkAcross {
-            from { transform: translateX(110vw) scaleX(1); }
-            to { transform: translateX(-20vw) scaleX(1); }
-        }
-
-        .walking-animal.reverse {
-            animation: walkAcrossRev 15s linear forwards;
-        }
-
-        @keyframes walkAcrossRev {
-            from { transform: translateX(-20vw) scaleX(-1); }
-            to { transform: translateX(110vw) scaleX(-1); }
-        }
-
-        /* Gathered Audience for Final Page */
-        .audience-container {
-            position: fixed;
-            bottom: -5px;
-            left: 0;
-            width: 100vw;
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-end;
-            font-size: 55px;
-            z-index: 30;
-            pointer-events: none; /* User can still click things behind them */
+            border-radius: 50%;
+            filter: blur(15px);
             opacity: 0;
-            transition: opacity 2s ease;
+            animation: floatBokeh infinite ease-in-out;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        .audience-container.show {
-            opacity: 1;
+        @keyframes floatBokeh {
+            0% { transform: translateY(10vh) scale(0.8); opacity: 0; }
+            30% { opacity: 0.3; }
+            70% { opacity: 0.3; }
+            100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
         }
 
-        .audience-member {
-            animation: bounceHappy 1s ease infinite alternate;
+        .firefly {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background-color: white;
+            border-radius: 50%;
+            box-shadow: 0 0 8px 3px rgba(255, 215, 0, 0.6);
+            opacity: 0;
+            pointer-events: none;
+            animation: driftFirefly linear infinite;
+            z-index: 2;
         }
 
-        @keyframes bounceHappy {
-            0% { transform: translateY(0) scale(1); }
-            100% { transform: translateY(-15px) scale(1.05); }
+        @keyframes driftFirefly {
+            0% { transform: translate(0, 10vh); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.6; }
+            100% { transform: translate(calc(-30vw + 60vw), -110vh); opacity: 0; }
         }
 
-        /* Easter Egg Styling */
+        .rising-heart {
+            position: fixed;
+            bottom: -50px;
+            color: #ffb7b2;
+            font-size: 20px;
+            pointer-events: none;
+            animation: riseUp ease-in-out forwards;
+            z-index: 5;
+            opacity: 0;
+            text-shadow: 0 0 15px rgba(255,183,178,0.8);
+        }
+
+        @keyframes riseUp {
+            0% { transform: translateY(0) scale(0.6) rotate(-20deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-120vh) scale(1.5) rotate(20deg); opacity: 0; }
+        }
+
+        /* Easter Egg Styling (Elegantly subtle) */
         .egg {
             width: 140px;
             height: 190px;
@@ -109,42 +98,47 @@
             border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
             margin: 0 auto;
             cursor: pointer;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-            transition: transform 0.2s;
+            box-shadow: 0 15px 40px rgba(255, 154, 158, 0.4);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
         }
 
-        .egg:hover { transform: scale(1.05) rotate(2deg); }
+        .egg:hover { 
+            transform: scale(1.05) translateY(-10px); 
+            box-shadow: 0 25px 50px rgba(255, 154, 158, 0.6);
+        }
         .egg:active { transform: scale(0.95); }
 
         /* Main Glass Container */
         .container {
             z-index: 10;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            padding: 45px 35px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
             max-width: 450px;
             width: 90%;
-            animation: floatContainer 4s ease-in-out infinite;
+            animation: floatContainer 6s ease-in-out infinite;
         }
 
         @keyframes floatContainer {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-12px); }
             100% { transform: translateY(0px); }
         }
 
         h2 {
-            color: #d4a5a5;
-            margin-bottom: 30px;
-            font-size: 1.5rem;
+            color: #c97a7e;
+            margin-bottom: 35px;
+            font-size: 1.6rem;
             min-height: 60px;
-            line-height: 1.4;
+            line-height: 1.5;
+            font-weight: normal;
         }
 
         .btn-container {
@@ -157,36 +151,37 @@
 
         button {
             padding: 12px 35px;
+            font-family: inherit;
             font-size: 1.2rem;
-            font-weight: bold;
+            letter-spacing: 1px;
             border: none;
             border-radius: 30px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+            transition: all 0.3s ease;
             color: white;
             outline: none;
         }
 
         #yes-btn {
-            background: linear-gradient(135deg, #ff9a9e, #fecfef);
-            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.5);
+            background: linear-gradient(135deg, #ff9a9e, #ffb7b2);
+            box-shadow: 0 5px 20px rgba(255, 183, 178, 0.5);
         }
 
         #yes-btn:hover {
-            transform: scale(1.15);
-            box-shadow: 0 6px 20px rgba(255, 154, 158, 0.7);
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 183, 178, 0.8);
         }
 
         #no-btn {
-            background: linear-gradient(135deg, #a8dadc, #457b9d);
-            box-shadow: 0 4px 15px rgba(168, 218, 220, 0.5);
+            background: rgba(180, 184, 197, 0.9); /* Subdued grey-blue */
+            box-shadow: 0 5px 20px rgba(180, 184, 197, 0.3);
             position: absolute;
             right: 15%;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         #main-container {
-            display: none; /* Initially hidden until egg is opened */
+            display: none;
         }
 
         #message-box {
@@ -195,71 +190,62 @@
             overflow-y: auto;
             position: relative;
             z-index: 20;
-            animation: slideUpFade 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: slideUpFade 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
         
         #message-box::-webkit-scrollbar {
             display: none;
         }
 
-        @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(50px) scale(0.9); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
         #message-box h1 { 
-            color: #b5838d; 
-            margin-bottom: 10px; 
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            animation: pulseText 2.5s ease-in-out infinite;
-        }
-
-        @keyframes pulseText {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            color: #d18287; 
+            margin-bottom: 5px; 
+            font-size: 2.8rem;
+            font-weight: normal;
+            font-style: italic;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.05);
         }
 
         #message-box p { 
-            color: var(--text-color); 
-            line-height: 1.6; 
-            margin: 8px 0;
-            font-size: 1.1rem;
+            color: #79717a; 
+            line-height: 1.8; 
+            margin: 6px 0;
+            font-size: 1.15rem;
             opacity: 0;
         }
 
         .show-poem p {
-            animation: fadeInPara 1s ease forwards;
+            animation: fadeInPara 1.5s ease forwards;
         }
         
         @keyframes fadeInPara {
             to { opacity: 1; transform: translateY(0); }
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
         }
 
         .heart { 
-            color: #e5989b; 
-            font-size: 45px; 
-            margin-bottom: 15px; 
-            animation: heartbeat 1.5s infinite;
+            color: #ff9a9e; 
+            font-size: 35px; 
+            margin-bottom: 5px; 
+            animation: heartbeat 2s infinite;
             display: inline-block;
+            text-shadow: 0 0 20px rgba(255, 154, 158, 0.6);
         }
 
         @keyframes heartbeat {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+            50% { transform: scale(1.15); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Starting Screen: The Easter Egg -->
+    <!-- Starting Screen: The Elegant Easter Egg -->
     <div class="container" id="egg-container">
         <div class="egg" onclick="startQuestions()">
-            <span style="color: white; font-weight: bold; font-size: 0.9rem;">TAP ME</span>
+            <span style="color: white; font-family: 'Arial', sans-serif; font-weight: bold; letter-spacing: 2px; font-size: 0.85rem;">OPEN</span>
         </div>
-        <h2 style="color: #d4a5a5; margin-top: 25px; margin-bottom: 0;">You have a delivery!</h2>
+        <h2 style="color: #c97a7e; margin-top: 30px; margin-bottom: 0; font-style: italic;">A special delivery for you...</h2>
     </div>
 
     <!-- Questions Container -->
@@ -274,10 +260,11 @@
 
     <!-- Final Surprise Container -->
     <div class="container" id="message-box">
-        <div class="heart">❤️🐰</div>
-        <h1>Happy Easter!</h1>
-        <p>You're the "some-bunny" I love the most.</p>
-        <p style="font-weight: bold; margin-top: 20px;">Easter Across the Miles</p>
+        <div class="heart">❤️</div>
+        <h1>Happy Easter</h1>
+        <p style="font-style: italic; color: #b08d95; margin-bottom: 25px;">You're the "some-bunny" I love the most.</p>
+        
+        <p style="font-weight: bold; color: #c97a7e; margin-top: 20px; font-size: 1.3rem;">Easter Across the Miles</p>
         <br>
         <p>Though oceans stretch between us wide,</p>   
         <p>And skies divide our hearts in two,</p>
@@ -296,7 +283,7 @@
         <br>
         <p>Happy Easter, my love, my light—</p>
         <p>You're Easter's miracle, pure and bright.</p>
-        <p style="font-weight: bold; margin-top: 20px;">Can't wait to see you soon!</p>
+        <p style="font-weight: bold; margin-top: 30px; font-style: italic; color: #b08d95;">Can't wait to see you soon.</p>
     </div>
 
     <script>
@@ -310,21 +297,17 @@
         let currentLevel = 0;
 
         function startQuestions() {
-            // Hide the egg
             document.getElementById('egg-container').style.display = 'none';
-            // Show the first question
             const mainBox = document.getElementById('main-container');
             mainBox.style.display = 'block';
-            mainBox.style.animation = 'slideUpFade 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+            mainBox.style.animation = 'slideUpFade 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
             
-            // Load the first question dynamically
             document.getElementById('question-text').innerText = questions[0];
         }
 
         function moveButton() {
             const noBtn = document.getElementById('no-btn');
             
-            // Move the button to the body so it isn't trapped by the container's backdrop-filter
             if (noBtn.parentElement !== document.body) {
                 const rect = noBtn.getBoundingClientRect();
                 document.body.appendChild(noBtn);
@@ -334,16 +317,15 @@
                 noBtn.style.zIndex = '1000';
             }
             
-            const maxWidth = window.innerWidth - noBtn.offsetWidth - 20;
-            const maxHeight = window.innerHeight - noBtn.offsetHeight - 20;
+            const maxWidth = window.innerWidth - noBtn.offsetWidth - 30;
+            const maxHeight = window.innerHeight - noBtn.offsetHeight - 30;
             
-            // Random x, y but staying perfectly within view
-            const randomX = Math.max(20, Math.random() * maxWidth);
-            const randomY = Math.max(20, Math.random() * maxHeight);
+            const randomX = Math.max(30, Math.random() * maxWidth);
+            const randomY = Math.max(30, Math.random() * maxHeight);
             
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
-            noBtn.style.transform = `scale(0.95)`;
+            noBtn.style.transform = `scale(0.9)`;
         }
 
         function nextQuestion() {
@@ -351,7 +333,6 @@
             const noBtn = document.getElementById('no-btn');
             const btnContainer = document.querySelector('.btn-container');
             
-            // Restore button back into the container
             if (noBtn.parentElement !== btnContainer) {
                 btnContainer.appendChild(noBtn);
             }
@@ -360,14 +341,13 @@
             noBtn.style.left = 'auto';
             noBtn.style.top = 'auto';
             noBtn.style.right = '15%';
-            noBtn.style.transform = 'scale(1)'; // reset scale
+            noBtn.style.transform = 'scale(1)';
             noBtn.style.zIndex = 'auto';
             
-            // Add a small bounce animation to the container to show progression
             const container = document.getElementById('main-container');
             container.style.animation = 'none';
-            void container.offsetWidth; // trigger HTML reflow
-            container.style.animation = 'floatContainer 4s ease-in-out infinite, zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            void container.offsetWidth; 
+            container.style.animation = 'floatContainer 6s ease-in-out infinite, slideUpFade 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)';
             
             if (currentLevel < questions.length) {
                 document.getElementById('question-text').innerText = questions[currentLevel];
@@ -382,85 +362,65 @@
             msgBox.style.display = 'block';
             msgBox.classList.add('show-poem');
             
-            // Stagger animation for paragraphs
             const paras = msgBox.querySelectorAll('p');
             paras.forEach((p, index) => {
-                p.style.animationDelay = `${0.3 + index * 0.2}s`;
+                p.style.animationDelay = `${0.5 + index * 0.25}s`;
             });
 
-            // Stop walkers in background so they don't distract
-            clearInterval(walkInterval);
-
-            // Create Audience of happy animals!
-            const audienceBox = document.createElement('div');
-            audienceBox.classList.add('audience-container');
-
-            // Pick 7-10 random animals to form the audience
-            const numAudience = Math.floor(window.innerWidth / 80); // base it on screen size
-            for (let i = 0; i < numAudience; i++) {
-                const member = document.createElement('div');
-                member.classList.add('audience-member');
-                member.innerText = walkAnimals[Math.floor(Math.random() * walkAnimals.length)];
-                // Randomize bounce delay so they bounce out of sync
-                member.style.animationDelay = (Math.random() * 1.5) + 's';
-                audienceBox.appendChild(member);
+            // Trigger a beautiful burst of rising hearts
+            const numHearts = Math.floor(window.innerWidth / 30);
+            for (let i = 0; i < numHearts; i++) {
+                setTimeout(createRisingHeart, Math.random() * 2000);
             }
-            
-            document.body.appendChild(audienceBox);
-            // Trigger fade in
-            setTimeout(() => audienceBox.classList.add('show'), 100);
+            // Keep sending a few up slowly
+            setInterval(createRisingHeart, 800);
         }
 
-        // Expanded particle/egg system
-        const particles = ['🌸', '💖', '✨', '🐰', '🌷', '🥚', '🪺', '🐣'];
-        function createParticle() {
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
+        // Ambient Effects System
+        function createAmbientEffects() {
+            // Create Bokeh Orbs
+            const bokehColors = ['rgba(255, 183, 178, 0.4)', 'rgba(255, 207, 239, 0.4)', 'rgba(255, 255, 255, 0.5)'];
+            const orb = document.createElement('div');
+            orb.classList.add('bokeh');
             
-            // 40% chance for emoji (easter theme), 60% chance for traditional CSS petal
-            if (Math.random() > 0.6) {
-                particle.innerText = particles[Math.floor(Math.random() * particles.length)];
-                particle.style.fontSize = Math.random() * 18 + 15 + 'px';
-            } else {
-                particle.style.backgroundColor = ['#ffc0cb', '#ffb7b2', '#ff9a9e', '#a8dadc', '#ffd166'][Math.floor(Math.random() * 5)];
-                particle.style.borderRadius = '150% 0 150% 0'; // Petal shape
-                particle.style.width = Math.random() * 15 + 10 + 'px';
-                particle.style.height = particle.style.width;
+            orb.style.backgroundColor = bokehColors[Math.floor(Math.random() * bokehColors.length)];
+            const size = Math.random() * 80 + 40; // 40px to 120px
+            orb.style.width = size + 'px';
+            orb.style.height = size + 'px';
+            orb.style.left = Math.random() * 100 + 'vw';
+            orb.style.animationDuration = Math.random() * 15 + 15 + 's'; // 15 to 30s float
+            
+            document.body.appendChild(orb);
+            setTimeout(() => orb.remove(), 30000);
+
+            // Create Fireflies
+            if (Math.random() > 0.3) {
+                const firefly = document.createElement('div');
+                firefly.classList.add('firefly');
+                firefly.style.left = Math.random() * 100 + 'vw';
+                firefly.style.animationDuration = Math.random() * 8 + 6 + 's';
+                document.body.appendChild(firefly);
+                setTimeout(() => firefly.remove(), 15000);
             }
-
-            particle.style.left = Math.random() * 100 + 'vw';
-            particle.style.animationDuration = Math.random() * 5 + 4 + 's'; // Falling slower
-            particle.style.animationDelay = Math.random() * 2 + 's';
-            
-            document.body.appendChild(particle);
-            setTimeout(() => particle.remove(), 9000); 
         }
-        setInterval(createParticle, 250);
-
-        // Walking Animals Background System
-        const walkAnimals = ['🐇', '🐥', '🦆', '🐰', '🐿️', '🐢'];
-        let walkInterval;
         
-        function spawnWalker() {
-            const animal = document.createElement('div');
-            animal.classList.add('walking-animal');
-            animal.innerText = walkAnimals[Math.floor(Math.random() * walkAnimals.length)];
+        // Spawn ambient effects continuously
+        setInterval(createAmbientEffects, 600);
+        // Initial spread
+        for(let i=0; i<10; i++) { setTimeout(createAmbientEffects, i*100); }
+
+        function createRisingHeart() {
+            const heartIcons = ['🤍', '🌸', '✨', '🩷'];
+            const heart = document.createElement('div');
+            heart.classList.add('rising-heart');
+            heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 6 + 6 + 's';
+            heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
             
-            // Place randomly vertically around the lower-middle half of screen
-            animal.style.bottom = (Math.random() * 40 + 5) + '%';
-            
-            // 50% chance to flip horizontally and walk left to right
-            if (Math.random() > 0.5) {
-                animal.classList.add('reverse');
-            }
-            
-            document.body.appendChild(animal);
-            setTimeout(() => animal.remove(), 16000);
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 12000);
         }
-        // Spawn one animal every couple seconds
-        walkInterval = setInterval(spawnWalker, 3000);
-        // Spawn first animal immediately
-        spawnWalker();
 
     </script>
 </body>
