@@ -2,13 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Apple Web App styling -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Easter Surprise</title>
     <style>
         :root {
             --primary-pink: #ffb7b2;
             --soft-yellow: #faf9f6;
             --text-color: #6d6875;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Prevent bouncing/scrolling */
         }
 
         body {
@@ -21,10 +30,18 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            font-family: 'Georgia', serif; /* Switch to serif for more elegance */
-            overflow: hidden;
+            font-family: 'Georgia', serif;
             text-align: center;
+            /* Fix for iOS Safari 100vh issue */
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            position: fixed; /* Stops elastic bounce on iOS */
+            top: 0;
+            left: 0;
+        }
+
+        html {
+            height: -webkit-fill-available;
         }
 
         @keyframes gradientBG {
@@ -68,7 +85,7 @@
             0% { transform: translate(0, 10vh); opacity: 0; }
             20% { opacity: 0.8; }
             80% { opacity: 0.6; }
-            100% { transform: translate(calc(-30vw + 60vw), -110vh); opacity: 0; }
+            100% { transform: translate(calc(-30vw + 60vw), -120vh); opacity: 0; }
         }
 
         .rising-heart {
@@ -90,10 +107,10 @@
             100% { transform: translateY(-120vh) scale(1.5) rotate(20deg); opacity: 0; }
         }
 
-        /* Easter Egg Styling (Elegantly subtle) */
+        /* Easter Egg Styling */
         .egg {
-            width: 140px;
-            height: 190px;
+            width: 130px;
+            height: 180px;
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
             border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
             margin: 0 auto;
@@ -104,6 +121,8 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            /* Enhance touch target on mobile */
+            -webkit-tap-highlight-color: transparent;
         }
 
         .egg:hover { 
@@ -115,29 +134,30 @@
         /* Main Glass Container */
         .container {
             z-index: 10;
-            padding: 45px 35px;
+            padding: 40px 30px;
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px); /* Safary specific */
             border: 1px solid rgba(255, 255, 255, 0.5);
             border-radius: 25px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.1);
             max-width: 450px;
-            width: 90%;
+            width: 85%;
             animation: floatContainer 6s ease-in-out infinite;
         }
 
         @keyframes floatContainer {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
 
         h2 {
             color: #c97a7e;
-            margin-bottom: 35px;
-            font-size: 1.6rem;
-            min-height: 60px;
-            line-height: 1.5;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            min-height: 70px; /* Accounts for line breaks on mobile */
+            line-height: 1.4;
             font-weight: normal;
         }
 
@@ -150,9 +170,9 @@
         }
 
         button {
-            padding: 12px 35px;
+            padding: 12px 30px;
             font-family: inherit;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             letter-spacing: 1px;
             border: none;
             border-radius: 30px;
@@ -160,6 +180,8 @@
             transition: all 0.3s ease;
             color: white;
             outline: none;
+            -webkit-tap-highlight-color: transparent; /* Remove grey box on iOS tap */
+            touch-action: manipulation; /* Faster taps on mobile */
         }
 
         #yes-btn {
@@ -172,12 +194,16 @@
             box-shadow: 0 8px 25px rgba(255, 183, 178, 0.8);
         }
 
+        #yes-btn:active {
+            transform: scale(0.95);
+        }
+
         #no-btn {
-            background: rgba(180, 184, 197, 0.9); /* Subdued grey-blue */
+            background: rgba(180, 184, 197, 0.9);
             box-shadow: 0 5px 20px rgba(180, 184, 197, 0.3);
             position: absolute;
-            right: 15%;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            right: 12%;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         #main-container {
@@ -186,8 +212,9 @@
 
         #message-box {
             display: none;
-            max-height: 85vh;
+            max-height: 80vh;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
             position: relative;
             z-index: 20;
             animation: slideUpFade 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
@@ -200,7 +227,7 @@
         #message-box h1 { 
             color: #d18287; 
             margin-bottom: 5px; 
-            font-size: 2.8rem;
+            font-size: 2.4rem;
             font-weight: normal;
             font-style: italic;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.05);
@@ -208,9 +235,9 @@
 
         #message-box p { 
             color: #79717a; 
-            line-height: 1.8; 
-            margin: 6px 0;
-            font-size: 1.15rem;
+            line-height: 1.7; 
+            margin: 8px 0;
+            font-size: 1.05rem;
             opacity: 0;
         }
 
@@ -236,6 +263,36 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.15); }
         }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+                width: 85%;
+            }
+            h2 {
+                font-size: 1.3rem;
+                margin-bottom: 25px;
+            }
+            #message-box h1 {
+                font-size: 2rem;
+            }
+            #message-box p {
+                font-size: 1rem;
+                line-height: 1.5;
+                margin: 5px 0;
+            }
+            button {
+                padding: 10px 25px;
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            h2 { font-size: 1.15rem; min-height: 60px; }
+            #message-box p { font-size: 0.95rem; }
+            #message-box h1 { font-size: 1.8rem; }
+        }
     </style>
 </head>
 <body>
@@ -254,7 +311,8 @@
         
         <div class="btn-container">
             <button id="yes-btn" onclick="nextQuestion()">Yes</button>
-            <button id="no-btn" onmouseover="moveButton()" ontouchstart="moveButton()">No</button>
+            <!-- Using ontouchstart ensures mobile instantly triggers jump before tap registers -->
+            <button id="no-btn" onmouseover="moveButton()" ontouchstart="moveButton(event)">No</button>
         </div>
     </div>
 
@@ -262,9 +320,9 @@
     <div class="container" id="message-box">
         <div class="heart">❤️</div>
         <h1>Happy Easter</h1>
-        <p style="font-style: italic; color: #b08d95; margin-bottom: 25px;">You're the "some-bunny" I love the most.</p>
+        <p style="font-style: italic; color: #b08d95; margin-bottom: 20px;">You're the "some-bunny" I love the most.</p>
         
-        <p style="font-weight: bold; color: #c97a7e; margin-top: 20px; font-size: 1.3rem;">Easter Across the Miles</p>
+        <p style="font-weight: bold; color: #c97a7e; margin-top: 15px; font-size: 1.2rem;">Easter Across the Miles</p>
         <br>
         <p>Though oceans stretch between us wide,</p>   
         <p>And skies divide our hearts in two,</p>
@@ -283,7 +341,7 @@
         <br>
         <p>Happy Easter, my love, my light—</p>
         <p>You're Easter's miracle, pure and bright.</p>
-        <p style="font-weight: bold; margin-top: 30px; font-style: italic; color: #b08d95;">Can't wait to see you soon.</p>
+        <p style="font-weight: bold; margin-top: 25px; font-style: italic; color: #b08d95;">Can't wait to see you soon.</p>
     </div>
 
     <script>
@@ -305,7 +363,8 @@
             document.getElementById('question-text').innerText = questions[0];
         }
 
-        function moveButton() {
+        function moveButton(e) {
+            if(e) e.preventDefault(); // Prevent ghost clicks on mobile touch
             const noBtn = document.getElementById('no-btn');
             
             if (noBtn.parentElement !== document.body) {
@@ -317,11 +376,16 @@
                 noBtn.style.zIndex = '1000';
             }
             
-            const maxWidth = window.innerWidth - noBtn.offsetWidth - 30;
-            const maxHeight = window.innerHeight - noBtn.offsetHeight - 30;
+            // Generate bounds that properly handle mobile viewports
+            const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+            const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+            
+            // Keep button 30px away from the edges so it's fully tappable and not hidden by UI
+            const maxWidth = viewportWidth - noBtn.offsetWidth - 30;
+            const maxHeight = viewportHeight - noBtn.offsetHeight - 50; // extra space for bottom mobile bars
             
             const randomX = Math.max(30, Math.random() * maxWidth);
-            const randomY = Math.max(30, Math.random() * maxHeight);
+            const randomY = Math.max(40, Math.random() * maxHeight);
             
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
@@ -338,9 +402,10 @@
             }
             
             noBtn.style.position = 'absolute';
+            // Default styling for container reset
             noBtn.style.left = 'auto';
             noBtn.style.top = 'auto';
-            noBtn.style.right = '15%';
+            noBtn.style.right = '12%';
             noBtn.style.transform = 'scale(1)';
             noBtn.style.zIndex = 'auto';
             
@@ -358,6 +423,9 @@
 
         function showResult() {
             document.getElementById('main-container').style.display = 'none';
+            // Ensure no-button is hidden completely
+            document.getElementById('no-btn').style.display = 'none';
+            
             const msgBox = document.getElementById('message-box');
             msgBox.style.display = 'block';
             msgBox.classList.add('show-poem');
@@ -367,47 +435,43 @@
                 p.style.animationDelay = `${0.5 + index * 0.25}s`;
             });
 
-            // Trigger a beautiful burst of rising hearts
-            const numHearts = Math.floor(window.innerWidth / 30);
+            const numHearts = Math.floor((window.innerWidth || 300) / 30);
             for (let i = 0; i < numHearts; i++) {
                 setTimeout(createRisingHeart, Math.random() * 2000);
             }
-            // Keep sending a few up slowly
             setInterval(createRisingHeart, 800);
         }
 
-        // Ambient Effects System
+        // Ambient Effects System (Adjusted for mobile performance)
         function createAmbientEffects() {
-            // Create Bokeh Orbs
-            const bokehColors = ['rgba(255, 183, 178, 0.4)', 'rgba(255, 207, 239, 0.4)', 'rgba(255, 255, 255, 0.5)'];
-            const orb = document.createElement('div');
-            orb.classList.add('bokeh');
-            
-            orb.style.backgroundColor = bokehColors[Math.floor(Math.random() * bokehColors.length)];
-            const size = Math.random() * 80 + 40; // 40px to 120px
-            orb.style.width = size + 'px';
-            orb.style.height = size + 'px';
-            orb.style.left = Math.random() * 100 + 'vw';
-            orb.style.animationDuration = Math.random() * 15 + 15 + 's'; // 15 to 30s float
-            
-            document.body.appendChild(orb);
-            setTimeout(() => orb.remove(), 30000);
+            // Less bokeh elements on smaller screens to keep it smooth
+            const screenW = window.innerWidth || document.documentElement.clientWidth;
+            if (Math.random() > (screenW < 500 ? 0.3 : 0.1)) {
+                const bokehColors = ['rgba(255, 183, 178, 0.3)', 'rgba(255, 207, 239, 0.3)', 'rgba(255, 255, 255, 0.4)'];
+                const orb = document.createElement('div');
+                orb.classList.add('bokeh');
+                orb.style.backgroundColor = bokehColors[Math.floor(Math.random() * bokehColors.length)];
+                const size = Math.random() * 60 + 30; 
+                orb.style.width = size + 'px';
+                orb.style.height = size + 'px';
+                orb.style.left = Math.random() * 100 + 'vw';
+                orb.style.animationDuration = Math.random() * 10 + 15 + 's'; 
+                document.body.appendChild(orb);
+                setTimeout(() => orb.remove(), 25000);
+            }
 
-            // Create Fireflies
-            if (Math.random() > 0.3) {
+            if (Math.random() > 0.4) {
                 const firefly = document.createElement('div');
                 firefly.classList.add('firefly');
                 firefly.style.left = Math.random() * 100 + 'vw';
-                firefly.style.animationDuration = Math.random() * 8 + 6 + 's';
+                firefly.style.animationDuration = Math.random() * 6 + 6 + 's';
                 document.body.appendChild(firefly);
-                setTimeout(() => firefly.remove(), 15000);
+                setTimeout(() => firefly.remove(), 12000);
             }
         }
         
-        // Spawn ambient effects continuously
-        setInterval(createAmbientEffects, 600);
-        // Initial spread
-        for(let i=0; i<10; i++) { setTimeout(createAmbientEffects, i*100); }
+        setInterval(createAmbientEffects, 800); // slightly slower interval for mobile performance
+        for(let i=0; i<8; i++) { setTimeout(createAmbientEffects, i*150); }
 
         function createRisingHeart() {
             const heartIcons = ['🤍', '🌸', '✨', '🩷'];
@@ -415,13 +479,11 @@
             heart.classList.add('rising-heart');
             heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 6 + 6 + 's';
-            heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
-            
+            heart.style.animationDuration = Math.random() * 5 + 5 + 's'; // Slightly faster rise
+            heart.style.fontSize = (Math.random() * 12 + 14) + 'px';
             document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 12000);
+            setTimeout(() => heart.remove(), 10000);
         }
-
     </script>
 </body>
 </html>
