@@ -226,31 +226,44 @@
         function moveButton() {
             const noBtn = document.getElementById('no-btn');
             
+            // Move the button to the body so it isn't trapped by the container's backdrop-filter
+            if (noBtn.parentElement !== document.body) {
+                const rect = noBtn.getBoundingClientRect();
+                document.body.appendChild(noBtn);
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = rect.left + 'px';
+                noBtn.style.top = rect.top + 'px';
+                noBtn.style.zIndex = '1000';
+            }
+            
             const maxWidth = window.innerWidth - noBtn.offsetWidth - 20;
             const maxHeight = window.innerHeight - noBtn.offsetHeight - 20;
             
-            // Random x, y but staying slightly within view
-            const randomX = Math.max(10, Math.random() * maxWidth);
-            const randomY = Math.max(10, Math.random() * maxHeight);
+            // Random x, y but staying perfectly within view
+            const randomX = Math.max(20, Math.random() * maxWidth);
+            const randomY = Math.max(20, Math.random() * maxHeight);
             
-            // Apply dramatic rotation while flying away
-            const randomRotate = (Math.random() - 0.5) * 360;
-
-            noBtn.style.position = 'fixed';
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
-            noBtn.style.transform = `rotate(${randomRotate}deg) scale(0.9)`;
+            noBtn.style.transform = `scale(0.95)`;
         }
 
         function nextQuestion() {
             currentLevel++;
             const noBtn = document.getElementById('no-btn');
+            const btnContainer = document.querySelector('.btn-container');
+            
+            // Restore button back into the container
+            if (noBtn.parentElement !== btnContainer) {
+                btnContainer.appendChild(noBtn);
+            }
             
             noBtn.style.position = 'absolute';
             noBtn.style.left = 'auto';
             noBtn.style.top = 'auto';
             noBtn.style.right = '15%';
-            noBtn.style.transform = 'rotate(0deg) scale(1)'; // reset rotation
+            noBtn.style.transform = 'scale(1)'; // reset scale
+            noBtn.style.zIndex = 'auto';
             
             // Add a small bounce animation to the container to show progression
             const container = document.getElementById('main-container');
