@@ -289,6 +289,53 @@
             50% { transform: scale(1.15); }
         }
 
+        .api-highlight {
+            margin: 28px 0 8px;
+            padding: 18px 16px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(49, 91, 154, 0.1), rgba(242, 184, 75, 0.18));
+            border: 1px solid rgba(49, 91, 154, 0.2);
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        .show-poem .api-highlight {
+            animation: fadeInPara 1.5s ease forwards;
+            animation-delay: 2.2s;
+        }
+
+        .api-highlight .smiley {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 8px;
+            animation: wink 2.4s ease-in-out infinite;
+        }
+
+        .api-highlight .label {
+            display: block;
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #6b7f98;
+            margin-bottom: 6px;
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+        }
+
+        .api-highlight .headline {
+            display: block;
+            color: #315b9a;
+            font-size: 1.15rem;
+            font-weight: bold;
+            line-height: 1.35;
+            margin: 0;
+        }
+
+        @keyframes wink {
+            0%, 45%, 55%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.12) rotate(-8deg); }
+        }
+
         /* Mobile specific adjustments */
         @media (max-width: 480px) {
             .container {
@@ -357,7 +404,13 @@
         <br>
         <p>May the year ahead bring bold opportunities,</p>
         <p>meaningful achievements, and plenty of reasons to celebrate.</p>
-        <br>
+
+        <div class="api-highlight">
+            <span class="smiley" aria-hidden="true">🐹</span>
+            <span class="label">Birthday highlight</span>
+            <span class="headline">Contracts API will be available soon!</span>
+        </div>
+
         <p style="font-weight: bold; margin-top: 25px; font-style: italic; color: #52657d;">Wishing you a brilliant birthday and an extraordinary year ahead.</p>
         <p style="font-weight: bold; margin-top: 25px; color: #315b9a;">With warm wishes and appreciation 🎉</p>
     </div>
