@@ -6,12 +6,12 @@
     <!-- Apple Web App styling -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Easter Surprise</title>
+    <title>Happy Birthday, Misha!</title>
     <style>
         :root {
-            --primary-pink: #ffb7b2;
-            --soft-yellow: #faf9f6;
-            --text-color: #6d6875;
+            --primary-blue: #315b9a;
+            --celebration-gold: #f2b84b;
+            --text-color: #26354a;
         }
 
         html, body {
@@ -21,8 +21,8 @@
         }
 
         body {
-            /* Elegant, softer animated gradient */
-            background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%, #fecfef 50%, #ff9a9e 100%);
+            /* Elegant birthday-inspired animated gradient */
+            background: linear-gradient(120deg, #f8fbff 0%, #e8f0fb 35%, #fff1cf 70%, #dbe8f8 100%);
             background-size: 300% 300%;
             animation: gradientBG 20s ease infinite;
             margin: 0;
@@ -50,7 +50,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Romantic Ambient Animations */
+        /* Celebration Ambient Animations */
         .bokeh {
             position: absolute;
             border-radius: 50%;
@@ -88,16 +88,16 @@
             100% { transform: translate(calc(-30vw + 60vw), -120vh); opacity: 0; }
         }
 
-        .rising-heart {
+        .rising-confetti {
             position: fixed;
             bottom: -50px;
-            color: #ffb7b2;
+            color: var(--celebration-gold);
             font-size: 20px;
             pointer-events: none;
             animation: riseUp ease-in-out forwards;
             z-index: 5;
             opacity: 0;
-            text-shadow: 0 0 15px rgba(255,183,178,0.8);
+            text-shadow: 0 0 15px rgba(242, 184, 75, 0.8);
         }
 
         @keyframes riseUp {
@@ -107,15 +107,15 @@
             100% { transform: translateY(-120vh) scale(1.5) rotate(20deg); opacity: 0; }
         }
 
-        /* Easter Egg Styling */
-        .egg {
-            width: 130px;
-            height: 180px;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-            border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+        /* Birthday Gift Styling */
+        .gift-box {
+            width: 160px;
+            height: 130px;
+            background: linear-gradient(135deg, #315b9a 0%, #5f8bc5 100%);
+            border-radius: 12px;
             margin: 0 auto;
             cursor: pointer;
-            box-shadow: 0 15px 40px rgba(255, 154, 158, 0.4);
+            box-shadow: 0 15px 40px rgba(49, 91, 154, 0.35);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
             display: flex;
             justify-content: center;
@@ -125,11 +125,36 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        .egg:hover { 
-            transform: scale(1.05) translateY(-10px); 
-            box-shadow: 0 25px 50px rgba(255, 154, 158, 0.6);
+        .gift-box::before {
+            content: '';
+            position: absolute;
+            width: 28px;
+            height: 100%;
+            background: linear-gradient(180deg, #ffd978, #f2b84b);
+            left: 50%;
+            transform: translateX(-50%);
         }
-        .egg:active { transform: scale(0.95); }
+
+        .gift-box::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 24px;
+            background: linear-gradient(90deg, #f2b84b, #ffd978, #f2b84b);
+            top: 24px;
+        }
+
+        .gift-box span {
+            position: relative;
+            z-index: 2;
+            margin-top: 54px;
+        }
+
+        .gift-box:hover {
+            transform: scale(1.05) translateY(-10px); 
+            box-shadow: 0 25px 50px rgba(49, 91, 154, 0.5);
+        }
+        .gift-box:active { transform: scale(0.95); }
 
         /* Main Glass Container */
         .container {
@@ -153,7 +178,7 @@
         }
 
         h2 {
-            color: #c97a7e;
+            color: var(--primary-blue);
             margin-bottom: 30px;
             font-size: 1.5rem;
             min-height: 70px; /* Accounts for line breaks on mobile */
@@ -185,13 +210,13 @@
         }
 
         #yes-btn {
-            background: linear-gradient(135deg, #ff9a9e, #ffb7b2);
-            box-shadow: 0 5px 20px rgba(255, 183, 178, 0.5);
+            background: linear-gradient(135deg, #315b9a, #5f8bc5);
+            box-shadow: 0 5px 20px rgba(49, 91, 154, 0.35);
         }
 
         #yes-btn:hover {
             transform: scale(1.1) translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 183, 178, 0.8);
+            box-shadow: 0 8px 25px rgba(49, 91, 154, 0.55);
         }
 
         #yes-btn:active {
@@ -225,7 +250,7 @@
         }
 
         #message-box h1 { 
-            color: #d18287; 
+            color: var(--primary-blue);
             margin-bottom: 5px; 
             font-size: 2.4rem;
             font-weight: normal;
@@ -250,13 +275,13 @@
             from { opacity: 0; transform: translateY(15px); }
         }
 
-        .heart { 
-            color: #ff9a9e; 
+        .celebration-icon {
+            color: var(--celebration-gold);
             font-size: 35px; 
             margin-bottom: 5px; 
             animation: heartbeat 2s infinite;
             display: inline-block;
-            text-shadow: 0 0 20px rgba(255, 154, 158, 0.6);
+            text-shadow: 0 0 20px rgba(242, 184, 75, 0.6);
         }
 
         @keyframes heartbeat {
@@ -297,66 +322,58 @@
 </head>
 <body>
 
-    <!-- Starting Screen: The Elegant Easter Egg -->
-    <div class="container" id="egg-container">
-        <div class="egg" onclick="startQuestions()">
+    <!-- Starting Screen: The Birthday Gift -->
+    <div class="container" id="gift-container">
+        <div class="gift-box" onclick="startQuestions()">
             <span style="color: white; font-family: 'Arial', sans-serif; font-weight: bold; letter-spacing: 2px; font-size: 0.85rem;">OPEN</span>
         </div>
-        <h2 style="color: #c97a7e; margin-top: 30px; margin-bottom: 0; font-style: italic;">A special delivery for you...</h2>
+        <h2 style="color: #315b9a; margin-top: 30px; margin-bottom: 0; font-style: italic;">A special birthday delivery for Misha...</h2>
     </div>
 
     <!-- Questions Container -->
     <div class="container" id="main-container">
-        <h2 id="question-text">Question 1: [Insert Your First Romantic Question Here]?</h2>
+        <h2 id="question-text">Ready for a birthday surprise, Misha?</h2>
         
         <div class="btn-container">
-            <button id="yes-btn" onclick="nextQuestion()">Yes</button>
+            <button id="yes-btn" onclick="nextQuestion()">Absolutely!</button>
             <!-- Using ontouchstart ensures mobile instantly triggers jump before tap registers -->
             <button id="no-btn" onmouseover="moveButton()" ontouchstart="moveButton(event)">No</button>
         </div>
     </div>
 
-    <!-- Final Surprise Container -->
+    <!-- Final Birthday Message -->
     <div class="container" id="message-box">
-        <div class="heart">❤️</div>
-        <h1>Happy Easter</h1>
-        <p style="font-style: italic; color: #b08d95; margin-bottom: 20px;">You're the "some-bunny" I love the most.</p>
-        
-        <p style="font-weight: bold; color: #c97a7e; margin-top: 15px; font-size: 1.2rem;">Easter Across the Miles</p>
+        <div class="celebration-icon">🎂</div>
+        <h1>Happy Birthday, Misha!</h1>
+        <p style="font-style: italic; color: #52657d; margin-bottom: 20px;">To an inspiring CEO and an exceptional leader.</p>
+
+        <p style="font-weight: bold; color: #315b9a; margin-top: 15px; font-size: 1.2rem;">Celebrating You Today</p>
         <br>
-        <p>Though oceans stretch between us wide,</p>   
-        <p>And skies divide our hearts in two,</p>
-        <p>This Easter dawn, with hope as guide,</p>
-        <p>I send my love, forever true.</p>
+        <p>Today is a celebration of the vision, energy,</p>
+        <p>and purpose you bring to everything you do.</p>
         <br>
-        <p>Like spring's first bloom that breaks the frost,</p>
-        <p>Our bond defies the distance's chain</p>
-        <p>Rabbits hop, and eggs are tossed,</p>
-        <p>But you're the joy that eases pain.</p>
+        <p>Your leadership turns ambitious ideas into reality</p>
+        <p>and inspires everyone around you to aim higher.</p>
         <br>
-        <p>May chocolate sweets and pastel light</p>
-        <p>Remind you of my arms around,</p>
-        <p>In dreams tonight, we'll dance in flight,</p>
-        <p>Till we're together, safe and sound.</p>
+        <p>May the year ahead bring bold opportunities,</p>
+        <p>meaningful achievements, and plenty of reasons to celebrate.</p>
         <br>
-        <p>Happy Easter, my love, my light</p>
-        <p>You're Easter's miracle, pure and bright.</p>
-        <p style="font-weight: bold; margin-top: 25px; font-style: italic; color: #b08d95;">Can't wait to see you soon.</p>
-        <p style="font-weight: bold; margin-top: 25px; font-style: italic; color: #b08d95;">Love you Shuttumani</p>
+        <p style="font-weight: bold; margin-top: 25px; font-style: italic; color: #52657d;">Wishing you a brilliant birthday and an extraordinary year ahead.</p>
+        <p style="font-weight: bold; margin-top: 25px; color: #315b9a;">With warm wishes and appreciation 🎉</p>
     </div>
 
     <script>
         const questions = [
-            "Do you think about me as much as I think about you?",
-            "Are you ready to be spoiled when we finally move in together?",
-            "Am i your favourite Nerd?",
-            "Are you excited for our 2027 move to the UK?"
+            "Ready for a birthday surprise, Misha?",
+            "Should today include great cake and even greater celebrations?",
+            "Can we officially celebrate another year of inspiring leadership?",
+            "One last question: are you ready to make this your best year yet?"
         ];
         
         let currentLevel = 0;
 
         function startQuestions() {
-            document.getElementById('egg-container').style.display = 'none';
+            document.getElementById('gift-container').style.display = 'none';
             const mainBox = document.getElementById('main-container');
             mainBox.style.display = 'block';
             mainBox.style.animation = 'slideUpFade 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
@@ -436,11 +453,11 @@
                 p.style.animationDelay = `${0.5 + index * 0.25}s`;
             });
 
-            const numHearts = Math.floor((window.innerWidth || 300) / 30);
-            for (let i = 0; i < numHearts; i++) {
-                setTimeout(createRisingHeart, Math.random() * 2000);
+            const confettiCount = Math.floor((window.innerWidth || 300) / 30);
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(createRisingConfetti, Math.random() * 2000);
             }
-            setInterval(createRisingHeart, 800);
+            setInterval(createRisingConfetti, 800);
         }
 
         // Ambient Effects System (Adjusted for mobile performance)
@@ -448,7 +465,7 @@
             // Less bokeh elements on smaller screens to keep it smooth
             const screenW = window.innerWidth || document.documentElement.clientWidth;
             if (Math.random() > (screenW < 500 ? 0.3 : 0.1)) {
-                const bokehColors = ['rgba(255, 183, 178, 0.3)', 'rgba(255, 207, 239, 0.3)', 'rgba(255, 255, 255, 0.4)'];
+                const bokehColors = ['rgba(49, 91, 154, 0.25)', 'rgba(242, 184, 75, 0.3)', 'rgba(255, 255, 255, 0.4)'];
                 const orb = document.createElement('div');
                 orb.classList.add('bokeh');
                 orb.style.backgroundColor = bokehColors[Math.floor(Math.random() * bokehColors.length)];
@@ -474,16 +491,16 @@
         setInterval(createAmbientEffects, 800); // slightly slower interval for mobile performance
         for(let i=0; i<8; i++) { setTimeout(createAmbientEffects, i*150); }
 
-        function createRisingHeart() {
-            const heartIcons = ['🤍', '🌸', '✨', '🩷'];
-            const heart = document.createElement('div');
-            heart.classList.add('rising-heart');
-            heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 5 + 5 + 's'; // Slightly faster rise
-            heart.style.fontSize = (Math.random() * 12 + 14) + 'px';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 10000);
+        function createRisingConfetti() {
+            const celebrationIcons = ['✨', '🎉', '🎈', '⭐', '🥳'];
+            const confetti = document.createElement('div');
+            confetti.classList.add('rising-confetti');
+            confetti.innerText = celebrationIcons[Math.floor(Math.random() * celebrationIcons.length)];
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.animationDuration = Math.random() * 5 + 5 + 's';
+            confetti.style.fontSize = (Math.random() * 12 + 14) + 'px';
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 10000);
         }
     </script>
 </body>
