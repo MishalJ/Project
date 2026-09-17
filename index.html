@@ -1759,8 +1759,8 @@
         </div>
     </div>
 
-    <audio id="wait-music" src="assets/wait-theme.mp3" loop preload="auto" playsinline webkit-playsinline autoplay></audio>
-    <audio id="bg-music" src="assets/happy-birthday-piano.mp3" loop preload="auto" playsinline webkit-playsinline></audio>
+    <audio id="wait-music" src="assets/wait-theme.mp3" preload="auto" playsinline webkit-playsinline></audio>
+    <audio id="bg-music" src="assets/happy-birthday-piano.mp3" preload="auto" playsinline webkit-playsinline></audio>
     <button type="button" class="music-toggle" id="music-toggle" aria-label="Mute music" title="Music on · tap to mute">♪</button>
 
     <script>
@@ -2032,6 +2032,7 @@
         const MUSIC_VOLUME = 0.72;
         const WAIT_MUSIC_VOLUME = 0.9;
         const MUSIC_DUCKED = 0.22;
+        const MUSIC_START_AT = 3; // skip the quiet intro on both tracks
 
         let bgMusic = null;
         let waitMusic = null;
@@ -2054,15 +2055,27 @@
             return el;
         }
 
+        function bindMusicLoopFrom(audio) {
+            if (!audio || audio._loopFromBound) return;
+            audio._loopFromBound = true;
+            audio.loop = false;
+            audio.addEventListener('ended', () => {
+                if (!musicEnabled) return;
+                if (audio !== activeMusicEl()) return;
+                try { audio.currentTime = MUSIC_START_AT; } catch (_) {}
+                audio.play().catch(() => {});
+            });
+        }
+
         function ensureWaitMusic() {
             if (waitMusic) return waitMusic;
             waitMusic = document.getElementById('wait-music') || new Audio();
             musicSrcFor(waitMusic, WAIT_MUSIC_SRC);
-            waitMusic.loop = true;
             waitMusic.preload = 'auto';
             waitMusic.setAttribute('playsinline', '');
             waitMusic.setAttribute('webkit-playsinline', 'true');
             waitMusic.volume = musicEnabled ? WAIT_MUSIC_VOLUME : 0;
+            bindMusicLoopFrom(waitMusic);
             return waitMusic;
         }
 
@@ -2070,11 +2083,11 @@
             if (bgMusic) return bgMusic;
             bgMusic = document.getElementById('bg-music') || new Audio();
             musicSrcFor(bgMusic, MUSIC_SRC);
-            bgMusic.loop = true;
             bgMusic.preload = 'auto';
             bgMusic.setAttribute('playsinline', '');
             bgMusic.setAttribute('webkit-playsinline', 'true');
             bgMusic.volume = musicEnabled ? MUSIC_VOLUME : 0;
+            bindMusicLoopFrom(bgMusic);
             return bgMusic;
         }
 
@@ -2104,7 +2117,31 @@
             if (!waitMusic) return;
             waitMusic.pause();
             waitMusic.muted = false;
-            try { waitMusic.currentTime = 0; } catch (_) {}
+            try { waitMusic.currentTime = MUSIC_START_AT; } catch (_) {}
+        }
+
+        function seekMusicStart(audio) {
+            if (!audio) return Promise.resolve();
+            const apply = () => {
+                try {
+                    if (Number.isFinite(audio.duration) && audio.duration > MUSIC_START_AT) {
+                        audio.currentTime = MUSIC_START_AT;
+                    }
+                } catch (_) {}
+            };
+            if (audio.readyState >= 1) {
+                apply();
+                return Promise.resolve();
+            }
+            return new Promise((resolve) => {
+                const done = () => {
+                    apply();
+                    resolve();
+                };
+                audio.addEventListener('loadedmetadata', done, { once: true });
+                // Don't hang forever if metadata is slow
+                setTimeout(done, 800);
+            });
         }
 
         function playAudioElement(audio, volume) {
@@ -2112,11 +2149,13 @@
             unlockAudioContext();
             audio.muted = false;
             audio.volume = volume;
-            const result = audio.play();
-            if (result && typeof result.then === 'function') {
-                return result.then(() => !audio.paused && !audio.muted).catch(() => false);
-            }
-            return Promise.resolve(!audio.paused && !audio.muted);
+            return seekMusicStart(audio).then(() => {
+                const result = audio.play();
+                if (result && typeof result.then === 'function') {
+                    return result.then(() => !audio.paused && !audio.muted).catch(() => false);
+                }
+                return !audio.paused && !audio.muted;
+            });
         }
 
         function startWaitMusic() {
@@ -2127,7 +2166,7 @@
             const audio = ensureWaitMusic();
             if (bgMusic) {
                 bgMusic.pause();
-                try { bgMusic.currentTime = 0; } catch (_) {}
+                try { bgMusic.currentTime = MUSIC_START_AT; } catch (_) {}
             }
             waitMusicStarted = true;
             return playAudioElement(audio, WAIT_MUSIC_VOLUME).then((ok) => {
