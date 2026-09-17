@@ -1346,23 +1346,23 @@
         .wait-countdown {
             margin-top: 1.25rem;
             display: grid;
-            grid-template-columns: repeat(4, minmax(58px, 1fr));
-            gap: 10px;
-            width: min(360px, 100%);
+            grid-template-columns: repeat(4, minmax(72px, 1fr));
+            gap: 12px;
+            width: min(440px, 100%);
         }
 
         .wait-unit {
             background: rgba(255, 250, 246, 0.72);
             border: 1px solid rgba(255, 255, 255, 0.65);
-            border-radius: 16px;
-            padding: 12px 6px 10px;
+            border-radius: 18px;
+            padding: 16px 8px 14px;
             box-shadow: 0 10px 24px rgba(28, 42, 46, 0.08);
         }
 
         .wait-unit strong {
             display: block;
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.7rem;
+            font-size: clamp(1.85rem, 5vw, 2.25rem);
             font-weight: 600;
             color: var(--ink);
             line-height: 1;
@@ -1370,8 +1370,8 @@
 
         .wait-unit span {
             display: block;
-            margin-top: 6px;
-            font-size: 0.65rem;
+            margin-top: 8px;
+            font-size: 0.72rem;
             letter-spacing: 0.14em;
             text-transform: uppercase;
             color: #859094;
@@ -1386,27 +1386,59 @@
 
         .wait-timer-area {
             position: relative;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 8px;
-            width: min(460px, 100%);
-            margin-top: 1.35rem;
+            width: min(520px, 96vw);
+            margin-top: 1.6rem;
+            padding-left: clamp(120px, 28vw, 168px);
+            min-height: clamp(130px, 28vw, 168px);
         }
 
         .wait-timer-area .wait-countdown {
             margin-top: 0;
-            flex: 1 1 auto;
-            width: auto;
-            min-width: 0;
+            width: 100%;
         }
 
         .wait-tommy {
-            position: relative;
-            flex: 0 0 auto;
-            width: clamp(92px, 22vw, 128px);
-            height: clamp(92px, 22vw, 128px);
+            position: absolute;
+            bottom: -4px;
+            left: -14px;
+            width: clamp(120px, 28vw, 168px);
+            height: clamp(120px, 28vw, 168px);
             pointer-events: none;
+            opacity: 0;
+            z-index: 3;
+            animation: tommyWalkFromLeft 2.8s cubic-bezier(0.42, 0.05, 0.25, 1) forwards;
+        }
+
+        @keyframes tommyWalkFromLeft {
+            0% {
+                left: -18px;
+                opacity: 0;
+                transform: translate3d(0, 6px, 0);
+            }
+            12% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+            30% { transform: translate3d(0, -5px, 0); }
+            48% { transform: translate3d(0, 0, 0); }
+            66% { transform: translate3d(0, -4px, 0); }
+            82% {
+                left: 0;
+                opacity: 1;
+                transform: translate3d(0, 2px, 0);
+            }
+            100% {
+                left: 0;
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .wait-tommy.is-seated {
+            left: 0;
+            right: auto;
+            opacity: 1;
+            animation: tommySeatedBreath 3.8s ease-in-out infinite;
         }
 
         .wait-tommy video {
@@ -1422,16 +1454,37 @@
             height: 100%;
             display: block;
             object-fit: contain;
+            filter: drop-shadow(0 10px 18px rgba(28, 42, 46, 0.18));
+        }
+
+        @keyframes tommySeatedBreath {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
         }
 
         @media (max-width: 480px) {
+            .wait-countdown {
+                grid-template-columns: repeat(4, minmax(58px, 1fr));
+                gap: 8px;
+            }
+
+            .wait-unit {
+                padding: 12px 4px 10px;
+            }
+
+            .wait-unit strong {
+                font-size: 1.55rem;
+            }
+
             .wait-timer-area {
-                gap: 4px;
+                padding-left: 108px;
+                padding-right: 0;
+                min-height: 118px;
             }
 
             .wait-tommy {
-                width: 84px;
-                height: 84px;
+                width: 104px;
+                height: 104px;
             }
         }
     </style>
@@ -1453,7 +1506,7 @@
                 <div class="wait-unit"><strong id="cd-mins">0</strong><span>Mins</span></div>
                 <div class="wait-unit"><strong id="cd-secs">0</strong><span>Secs</span></div>
             </div>
-            <div class="wait-tommy" aria-hidden="true">
+            <div class="wait-tommy" id="wait-tommy" aria-hidden="true">
                 <video id="wait-tommy-video" src="videos/tommy-wait.mp4" muted loop playsinline preload="auto"></video>
                 <canvas id="wait-tommy-canvas"></canvas>
             </div>
@@ -1594,9 +1647,9 @@
         </div>
     </div>
 
-    <audio id="wait-music" src="assets/wait-theme.mp3" loop preload="auto" playsinline></audio>
+    <audio id="wait-music" src="assets/wait-theme.mp3" loop preload="auto" playsinline autoplay></audio>
     <audio id="bg-music" src="assets/happy-birthday-piano.mp3" loop preload="auto" playsinline></audio>
-    <button type="button" class="music-toggle" id="music-toggle" aria-label="Play music" title="Tap to play music">♪</button>
+    <button type="button" class="music-toggle" id="music-toggle" aria-label="Mute music" title="Music on · tap to mute">♪</button>
 
     <script>
         /* Access: localhost / early preview anytime; everyone else from 28 Sep 2026 00:01 London (BST) */
@@ -1642,6 +1695,7 @@
         let unlockTimer = null;
         let openExperienceReady = false;
         let onSiteUnlock = null;
+        let petalPathMode = true;
 
         function updateCountdown() {
             const remaining = Math.max(0, UNLOCK_AT.getTime() - Date.now());
@@ -1859,19 +1913,21 @@
             startSoftMusic();
         }
 
-        /* Wait page theme, then birthday piano after unlock */
+        /* Wait page theme, then birthday piano after unlock.
+           Music is ON by default; the button only mutes/unmutes. */
         const WAIT_MUSIC_SRC = 'assets/wait-theme.mp3';
         const MUSIC_SRC = 'assets/happy-birthday-piano.mp3';
         const MUSIC_VOLUME = 0.7;
-        const WAIT_MUSIC_VOLUME = 0.62;
+        const WAIT_MUSIC_VOLUME = 0.88;
         const MUSIC_DUCKED = 0.22;
 
         let bgMusic = null;
         let waitMusic = null;
-        let musicEnabled = true;
+        let musicEnabled = true; // default: playing
         let musicStarted = false;
         let waitMusicStarted = false;
         let waitTommyRunning = false;
+        let musicUnlockBound = false;
 
         function ensureWaitMusic() {
             if (waitMusic) return waitMusic;
@@ -1879,6 +1935,7 @@
             waitMusic.loop = true;
             waitMusic.preload = 'auto';
             waitMusic.setAttribute('playsinline', '');
+            try { waitMusic.load(); } catch (_) {}
             waitMusic.volume = musicEnabled ? WAIT_MUSIC_VOLUME : 0;
             return waitMusic;
         }
@@ -1900,59 +1957,77 @@
 
         function isMusicPlaying() {
             const audio = activeMusicEl();
-            return !!(audio && musicEnabled && !audio.paused && !audio.ended);
+            return !!(audio && musicEnabled && !audio.paused && !audio.ended && !audio.muted && audio.volume > 0);
         }
 
         function stopWaitMusic() {
             if (!waitMusic) return;
             waitMusic.pause();
+            waitMusic.muted = false;
             waitMusic.currentTime = 0;
         }
 
+        function playAudioElement(audio, volume) {
+            if (!audio) return Promise.resolve(false);
+            audio.muted = false;
+            audio.volume = volume;
+            const result = audio.play();
+            if (result && typeof result.then === 'function') {
+                return result.then(() => true).catch(() => false);
+            }
+            return Promise.resolve(!audio.paused);
+        }
+
         function startWaitMusic() {
-            if (siteUnlocked) return;
-            const audio = ensureWaitMusic();
-            if (!musicEnabled) {
-                audio.volume = 0;
+            if (siteUnlocked || !musicEnabled) {
                 updateMusicButton();
                 return;
             }
+            const audio = ensureWaitMusic();
             if (bgMusic) {
                 bgMusic.pause();
                 bgMusic.currentTime = 0;
             }
-            audio.volume = WAIT_MUSIC_VOLUME;
             waitMusicStarted = true;
-            const playPromise = audio.play();
-            if (playPromise && typeof playPromise.catch === 'function') {
-                playPromise.catch(() => {
-                    setTimeout(() => audio.play().catch(() => {}), 150);
-                });
-            }
-            updateMusicButton();
+
+            const finish = (ok) => {
+                updateMusicButton();
+                if (!ok) bindMusicUnlockGestures();
+            };
+
+            playAudioElement(audio, WAIT_MUSIC_VOLUME).then((ok) => {
+                if (ok) {
+                    finish(true);
+                    return;
+                }
+                audio.muted = true;
+                audio.volume = WAIT_MUSIC_VOLUME;
+                const mutedPlay = audio.play();
+                const afterMuted = () => {
+                    try { audio.muted = false; } catch (_) {}
+                    finish(!audio.paused && !audio.muted);
+                };
+                if (mutedPlay && typeof mutedPlay.then === 'function') {
+                    mutedPlay.then(afterMuted).catch(() => finish(false));
+                } else {
+                    afterMuted();
+                }
+            });
         }
 
         function startSoftMusic() {
-            if (!siteUnlocked) return;
-            stopWaitMusic();
-            const audio = ensureBgMusic();
-
-            if (!musicEnabled) {
-                audio.volume = 0;
+            if (!siteUnlocked || !musicEnabled) {
                 updateMusicButton();
                 return;
             }
-
-            audio.volume = MUSIC_VOLUME;
+            stopWaitMusic();
+            const audio = ensureBgMusic();
             musicStarted = true;
 
-            const playPromise = audio.play();
-            if (playPromise && typeof playPromise.catch === 'function') {
-                playPromise.catch(() => {
-                    setTimeout(() => audio.play().catch(() => {}), 150);
-                });
-            }
-            updateMusicButton();
+            playAudioElement(audio, MUSIC_VOLUME).then((ok) => {
+                updateMusicButton();
+                if (!ok) bindMusicUnlockGestures();
+            });
         }
 
         function setMusicDuck(duck) {
@@ -1960,44 +2035,73 @@
             bgMusic.volume = duck ? MUSIC_DUCKED : MUSIC_VOLUME;
         }
 
-        function toggleSoftMusic(e) {
-            if (e) e.stopPropagation();
-            const audio = activeMusicEl();
+        function bindMusicUnlockGestures() {
+            if (musicUnlockBound || !musicEnabled) return;
+            musicUnlockBound = true;
 
-            if (!isMusicPlaying()) {
-                musicEnabled = true;
+            const resume = (e) => {
+                if (!musicEnabled) return;
+                if (e && e.target && e.target.closest && e.target.closest('#music-toggle')) return;
                 if (siteUnlocked) startSoftMusic();
                 else startWaitMusic();
+                const video = document.getElementById('wait-tommy-video');
+                if (video && video.paused && !siteUnlocked) video.play().catch(() => {});
+                if (isMusicPlaying()) {
+                    document.removeEventListener('pointerdown', resume, true);
+                    document.removeEventListener('touchstart', resume, true);
+                    document.removeEventListener('keydown', resume, true);
+                    musicUnlockBound = false;
+                }
+            };
+
+            document.addEventListener('pointerdown', resume, true);
+            document.addEventListener('touchstart', resume, true);
+            document.addEventListener('keydown', resume, true);
+        }
+
+        function toggleSoftMusic(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            // Button only mutes / unmutes — music is on by default
+            if (musicEnabled) {
+                musicEnabled = false;
+                const audio = activeMusicEl();
+                if (audio) {
+                    audio.muted = true;
+                    audio.volume = 0;
+                    audio.pause();
+                }
+                updateMusicButton();
                 return;
             }
 
-            musicEnabled = false;
-            audio.volume = 0;
-            audio.pause();
-            updateMusicButton();
+            musicEnabled = true;
+            if (siteUnlocked) startSoftMusic();
+            else startWaitMusic();
         }
 
         function updateMusicButton() {
             const btn = document.getElementById('music-toggle');
             if (!btn) return;
-            const playing = isMusicPlaying();
             btn.textContent = musicEnabled ? '♪' : '♩';
-            btn.classList.toggle('muted', !musicEnabled || !playing);
-            btn.setAttribute('aria-label', playing ? 'Mute music' : 'Play music');
-            btn.title = playing ? 'Music on · tap to mute' : 'Tap to play music';
+            btn.classList.toggle('muted', !musicEnabled);
+            btn.setAttribute('aria-label', musicEnabled ? 'Mute music' : 'Unmute music');
+            btn.title = musicEnabled ? 'Music on · tap to mute' : 'Music muted · tap to play';
         }
 
         function stopWaitTommy() {
             waitTommyRunning = false;
             const video = document.getElementById('wait-tommy-video');
-            if (video) {
-                video.pause();
-            }
+            if (video) video.pause();
         }
 
         function startWaitTommyChroma() {
             const video = document.getElementById('wait-tommy-video');
             const canvas = document.getElementById('wait-tommy-canvas');
+            const tommy = document.getElementById('wait-tommy');
             if (!video || !canvas || siteUnlocked || waitTommyRunning) return;
 
             const ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -2005,6 +2109,18 @@
             video.muted = true;
             video.loop = true;
             video.playsInline = true;
+            video.currentTime = 0;
+
+            if (tommy) {
+                tommy.classList.remove('is-seated');
+                tommy.style.animation = 'none';
+                void tommy.offsetWidth;
+                tommy.style.animation = '';
+                tommy.addEventListener('animationend', (e) => {
+                    if (e.animationName !== 'tommyWalkFromLeft') return;
+                    tommy.classList.add('is-seated');
+                }, { once: true });
+            }
 
             const playPromise = video.play();
             if (playPromise && typeof playPromise.catch === 'function') {
@@ -2015,10 +2131,9 @@
                 if (!waitTommyRunning || siteUnlocked) return;
 
                 if (video.readyState >= 2 && video.videoWidth) {
-                    const targetW = 240;
-                    const scale = targetW / video.videoWidth;
+                    const targetW = 320;
                     const w = targetW;
-                    const h = Math.max(1, Math.round(video.videoHeight * scale));
+                    const h = Math.max(1, Math.round(video.videoHeight * (targetW / video.videoWidth)));
                     if (canvas.width !== w || canvas.height !== h) {
                         canvas.width = w;
                         canvas.height = h;
@@ -2027,9 +2142,7 @@
                     const frame = ctx.getImageData(0, 0, w, h);
                     const data = frame.data;
                     for (let i = 0; i < data.length; i += 4) {
-                        const r = data[i];
-                        const g = data[i + 1];
-                        const b = data[i + 2];
+                        const r = data[i], g = data[i + 1], b = data[i + 2];
                         if (g > 75 && g > r + 25 && g > b + 25) {
                             const key = Math.min(1, (g - Math.max(r, b)) / 85);
                             data[i + 3] = Math.round(data[i + 3] * (1 - key));
@@ -2045,21 +2158,23 @@
         }
 
         function enableWaitExperience() {
+            ensureWaitMusic();
             startWaitTommyChroma();
             startWaitMusic();
-            const unlockWaitAudio = (e) => {
-                if (siteUnlocked) return;
-                if (e.target && e.target.closest && e.target.closest('#music-toggle')) return;
-                startWaitMusic();
-                const video = document.getElementById('wait-tommy-video');
-                if (video && video.paused) video.play().catch(() => {});
-            };
-            document.addEventListener('pointerdown', unlockWaitAudio, true);
-            document.addEventListener('keydown', unlockWaitAudio, true);
+            const audio = ensureWaitMusic();
+            audio.addEventListener('canplaythrough', () => {
+                if (musicEnabled && !siteUnlocked) startWaitMusic();
+            }, { once: true });
+            bindMusicUnlockGestures();
             updateMusicButton();
         }
 
-        document.getElementById('music-toggle').addEventListener('click', toggleSoftMusic);
+        const musicBtn = document.getElementById('music-toggle');
+        musicBtn.addEventListener('pointerdown', toggleSoftMusic);
+        musicBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        });
         ensureBgMusic();
         ensureWaitMusic();
 
@@ -2096,6 +2211,7 @@
             }
 
             startSoftMusic();
+            bindMusicUnlockGestures();
             document.addEventListener('pointerdown', unlockLandingMusic, true);
             document.addEventListener('keydown', unlockLandingMusic, true);
             updateMusicButton();
@@ -2103,12 +2219,6 @@
 
         onSiteUnlock = enableOpenExperience;
         updateMusicButton();
-
-        if (siteUnlocked) {
-            enableOpenExperience();
-        } else {
-            enableWaitExperience();
-        }
 
         function nextQuestion() {
             startSoftMusic();
@@ -2247,8 +2357,6 @@
             setInterval(pauseBgIfNeeded, 500);
         }
 
-        let petalPathMode = true;
-
         function setPetalPathMode(enabled) {
             petalPathMode = enabled;
         }
@@ -2347,6 +2455,13 @@
         }
 
         renderWishes();
+
+        if (siteUnlocked) {
+            enableOpenExperience();
+        } else {
+            enableWaitExperience();
+        }
+
         if (!siteUnlocked) {
             setInterval(createAmbientEffects, 1100);
         }
