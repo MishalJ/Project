@@ -6,7 +6,7 @@ A personal birthday gift page for **September 28**.
 
 https://mishalj.github.io/Project/
 
-Public unlock: **27 September 2026, 12:01 AM IST**.
+Public unlock: **28 September 2026, 12:01 AM London time**.
 
 Until then, visitors see a countdown. Local preview (`localhost`) is always open.
 
