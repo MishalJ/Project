@@ -1379,6 +1379,160 @@
             color: #6d787c;
             letter-spacing: 0.02em;
         }
+
+        .wait-timer-area {
+            position: relative;
+            width: min(420px, 100%);
+            margin-top: 1.45rem;
+            padding-right: 92px;
+        }
+
+        .wait-timer-area .wait-countdown {
+            margin-top: 0;
+            width: 100%;
+        }
+
+        .wait-cat {
+            position: absolute;
+            right: 0;
+            bottom: -2px;
+            width: 78px;
+            height: 78px;
+            z-index: 3;
+            pointer-events: none;
+            opacity: 0;
+            animation: tommyWalkIn 7.2s cubic-bezier(0.42, 0.02, 0.28, 1) forwards;
+        }
+
+        .wait-cat-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid rgba(255, 250, 246, 0.96);
+            box-shadow:
+                0 14px 28px rgba(28, 42, 46, 0.2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+            background: #1a1a1a;
+            transform-origin: 50% 80%;
+        }
+
+        .wait-cat img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 18%;
+            display: block;
+        }
+
+        .wait-cat-paw {
+            position: absolute;
+            width: 14px;
+            height: 10px;
+            border-radius: 40% 40% 50% 50%;
+            background: #111;
+            bottom: 2px;
+            opacity: 0.85;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .wait-cat-paw.left { left: 16px; }
+        .wait-cat-paw.right { right: 16px; }
+
+        .wait-cat-shadow {
+            position: absolute;
+            left: 50%;
+            bottom: -6px;
+            width: 54px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(28, 42, 46, 0.18);
+            transform: translateX(-50%);
+            filter: blur(2px);
+            z-index: -1;
+        }
+
+        @keyframes tommyWalkIn {
+            0% {
+                right: auto;
+                left: -18%;
+                opacity: 0;
+                transform: translate3d(0, 10px, 0) scaleX(-1);
+            }
+            6% { opacity: 1; }
+            12% { transform: translate3d(0, 0, 0) scaleX(-1); }
+            18% { transform: translate3d(0, -8px, 0) scaleX(-1); }
+            24% { transform: translate3d(0, 0, 0) scaleX(-1); }
+            32% { transform: translate3d(0, -7px, 0) scaleX(-1); }
+            40% { transform: translate3d(0, 0, 0) scaleX(-1); }
+            48% { transform: translate3d(0, -8px, 0) scaleX(-1); }
+            56% { transform: translate3d(0, 0, 0) scaleX(-1); }
+            64% { transform: translate3d(0, -6px, 0) scaleX(-1); }
+            74% {
+                left: auto;
+                right: 0;
+                transform: translate3d(0, 0, 0) scaleX(-1);
+            }
+            84% {
+                left: auto;
+                right: 0;
+                transform: translate3d(0, 4px, 0) scaleX(1);
+            }
+            100% {
+                left: auto;
+                right: 0;
+                opacity: 1;
+                transform: translate3d(0, 0, 0) scaleX(1);
+            }
+        }
+
+        .wait-cat.is-walking .wait-cat-paw.left {
+            animation: tommyPaw 0.55s ease-in-out infinite;
+        }
+
+        .wait-cat.is-walking .wait-cat-paw.right {
+            animation: tommyPaw 0.55s ease-in-out infinite reverse;
+        }
+
+        .wait-cat.is-walking .wait-cat-shadow {
+            animation: tommyShadow 0.55s ease-in-out infinite;
+        }
+
+        @keyframes tommyPaw {
+            0%, 100% { transform: translateY(0); opacity: 0.55; }
+            50% { transform: translateY(-3px); opacity: 0.9; }
+        }
+
+        @keyframes tommyShadow {
+            0%, 100% { width: 54px; opacity: 0.22; }
+            50% { width: 42px; opacity: 0.14; }
+        }
+
+        .wait-cat.is-sitting .wait-cat-inner {
+            animation: tommyLook 4.2s ease-in-out infinite;
+        }
+
+        .wait-cat.is-sitting .wait-cat-paw {
+            opacity: 0;
+        }
+
+        @keyframes tommyLook {
+            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+            35% { transform: translateY(-2px) rotate(-2.5deg) scale(1.02); }
+            70% { transform: translateY(0) rotate(2deg) scale(1.01); }
+        }
+
+        @media (max-width: 480px) {
+            .wait-timer-area {
+                padding-right: 78px;
+                width: min(100%, 360px);
+            }
+
+            .wait-cat {
+                width: 66px;
+                height: 66px;
+            }
+        }
     </style>
 </head>
 <body class="is-locked">
@@ -1391,11 +1545,21 @@
             <p>Every late night was a love letter.<br>Every careful detail was my way of holding you.</p>
             <p>Wait with me a little longer.<br>When your birthday begins, so does everything I made for your heart.</p>
         </div>
-        <div class="wait-countdown" id="wait-countdown" aria-label="Countdown to unlock">
-            <div class="wait-unit"><strong id="cd-days">0</strong><span>Days</span></div>
-            <div class="wait-unit"><strong id="cd-hours">0</strong><span>Hours</span></div>
-            <div class="wait-unit"><strong id="cd-mins">0</strong><span>Mins</span></div>
-            <div class="wait-unit"><strong id="cd-secs">0</strong><span>Secs</span></div>
+        <div class="wait-timer-area">
+            <div class="wait-cat is-walking" id="wait-cat" aria-hidden="true">
+                <span class="wait-cat-shadow"></span>
+                <div class="wait-cat-inner">
+                    <img src="assets/tommy.png" alt="">
+                </div>
+                <span class="wait-cat-paw left"></span>
+                <span class="wait-cat-paw right"></span>
+            </div>
+            <div class="wait-countdown" id="wait-countdown" aria-label="Countdown to unlock">
+                <div class="wait-unit"><strong id="cd-days">0</strong><span>Days</span></div>
+                <div class="wait-unit"><strong id="cd-hours">0</strong><span>Hours</span></div>
+                <div class="wait-unit"><strong id="cd-mins">0</strong><span>Mins</span></div>
+                <div class="wait-unit"><strong id="cd-secs">0</strong><span>Secs</span></div>
+            </div>
         </div>
         <p class="wait-opens" id="wait-opens-label">Opens 28 Sep 2026 · 12:01 AM London time</p>
     </div>
@@ -1624,6 +1788,14 @@
             document.body.classList.add('is-open');
         } else {
             lockSite();
+            const waitCat = document.getElementById('wait-cat');
+            if (waitCat) {
+                waitCat.addEventListener('animationend', (e) => {
+                    if (e.animationName !== 'tommyWalkIn') return;
+                    waitCat.classList.remove('is-walking');
+                    waitCat.classList.add('is-sitting');
+                });
+            }
         }
 
         const questions = [
