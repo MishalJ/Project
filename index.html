@@ -1495,10 +1495,10 @@
 
         .wait-timer-area {
             position: relative;
-            width: min(520px, 96vw);
+            width: min(560px, 96vw);
             margin-top: 1.6rem;
-            padding-left: clamp(120px, 28vw, 168px);
-            min-height: clamp(130px, 28vw, 168px);
+            padding-left: clamp(160px, 34vw, 220px);
+            min-height: clamp(170px, 34vw, 220px);
         }
 
         .wait-timer-area .wait-countdown {
@@ -1510,8 +1510,8 @@
             position: absolute;
             bottom: -4px;
             left: -14px;
-            width: clamp(120px, 28vw, 168px);
-            height: clamp(120px, 28vw, 168px);
+            width: clamp(160px, 34vw, 220px);
+            height: clamp(160px, 34vw, 220px);
             pointer-events: none;
             opacity: 0;
             z-index: 3;
@@ -1586,14 +1586,14 @@
             }
 
             .wait-timer-area {
-                padding-left: 108px;
+                padding-left: 140px;
                 padding-right: 0;
-                min-height: 118px;
+                min-height: 150px;
             }
 
             .wait-tommy {
-                width: 104px;
-                height: 104px;
+                width: 136px;
+                height: 136px;
             }
         }
     </style>
@@ -2381,7 +2381,7 @@
                 if (!waitTommyRunning || siteUnlocked) return;
 
                 if (video.readyState >= 2 && video.videoWidth) {
-                    const targetW = 320;
+                    const targetW = 420;
                     const w = targetW;
                     const h = Math.max(1, Math.round(video.videoHeight * (targetW / video.videoWidth)));
                     if (canvas.width !== w || canvas.height !== h) {
