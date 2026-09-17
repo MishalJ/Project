@@ -831,8 +831,8 @@
 
         .balloon {
             position: relative;
-            width: clamp(70px, 9vw, 100px);
-            height: clamp(90px, 11vw, 124px);
+            width: clamp(62px, 8vw, 92px);
+            height: clamp(80px, 10vw, 114px);
             border-radius: 50% 50% 48% 48% / 55% 55% 45% 45%;
             box-shadow:
                 inset -12px -18px 28px rgba(0, 0, 0, 0.12),
@@ -863,7 +863,7 @@
 
         .balloon-name {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2.8vw, 1.15rem);
             font-weight: 600;
             color: var(--teal);
             margin: 0;
@@ -895,6 +895,13 @@
         }
 
         .balloon--tommy::after { border-top-color: #111; }
+
+        .balloon--jj {
+            background: linear-gradient(160deg, #f7e7b8, #d4a84b 55%, #8a6a2a);
+            animation-delay: 1.5s;
+        }
+
+        .balloon--jj::after { border-top-color: #8a6a2a; }
 
         .wish-egg:nth-child(odd) .balloon { animation-duration: 3.2s; }
         .wish-egg:nth-child(even) .balloon { animation-duration: 3.8s; }
@@ -1203,8 +1210,8 @@
                 width: 100%;
             }
 
-            .wish-egg {
-                width: auto;
+            .balloon-row {
+                gap: clamp(10px, 2.5vw, 28px);
             }
 
             .egg-stage video {
@@ -1870,7 +1877,8 @@
         const familyWishes = [
             { src: 'videos/Jay.mp4', from: 'Jay', tone: 'jay' },
             { src: 'videos/Seles.mp4', from: 'Seles', tone: 'seles' },
-            { src: 'videos/Tommy.mp4', from: 'Tommy', tone: 'tommy' }
+            { src: 'videos/Tommy.mp4', from: 'Tommy', tone: 'tommy' },
+            { src: 'videos/JJ.mp4', from: 'J&J', tone: 'jj' }
         ];
 
         let currentLevel = 0;
