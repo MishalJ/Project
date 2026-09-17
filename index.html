@@ -2026,7 +2026,8 @@
             mainBox.style.display = 'flex';
             mainBox.style.animation = 'slideIn 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
             document.getElementById('question-text').innerText = questions[0];
-            startSoftMusic();
+            // OPEN starts the piano once; Yes taps must not restart it
+            startSoftMusic({ restart: true });
         }
 
         /* Wait page theme, then birthday piano after unlock.
@@ -2186,13 +2187,39 @@
             });
         }
 
-        function startSoftMusic() {
+        function startSoftMusic(options = {}) {
+            const restart = options.restart === true;
             if (!siteUnlocked || !musicEnabled) {
                 updateMusicButton();
                 return Promise.resolve(false);
             }
             stopWaitMusic();
             const audio = ensureBgMusic();
+
+            // Already running — never restart on Yes taps
+            if (!restart && musicStarted && audio && !audio.paused && !audio.muted) {
+                audio.volume = MUSIC_VOLUME;
+                updateMusicButton();
+                return Promise.resolve(true);
+            }
+
+            // Resume after mute without jumping to the start
+            if (!restart && musicStarted && audio && audio.paused) {
+                unlockAudioContext();
+                audio.muted = false;
+                audio.volume = MUSIC_VOLUME;
+                const result = audio.play();
+                const done = (ok) => {
+                    updateMusicButton();
+                    if (!ok) armMusicAutoplay();
+                    return ok;
+                };
+                if (result && typeof result.then === 'function') {
+                    return result.then(() => done(true)).catch(() => done(false));
+                }
+                return Promise.resolve(done(!audio.paused));
+            }
+
             musicStarted = true;
             return playAudioElement(audio, MUSIC_VOLUME, PIANO_MUSIC_START_AT).then((ok) => {
                 updateMusicButton();
@@ -2203,7 +2230,10 @@
 
         function ensureDesiredMusic() {
             if (!musicEnabled) return Promise.resolve(false);
-            return siteUnlocked ? startSoftMusic() : startWaitMusic();
+            if (!siteUnlocked) return startWaitMusic();
+            // On gift pages, only continue piano if OPEN already started it
+            if (musicStarted) return startSoftMusic({ restart: false });
+            return Promise.resolve(false);
         }
 
         function setMusicDuck(duck) {
@@ -2464,10 +2494,7 @@
                 });
             }
 
-            ensureDesiredMusic();
-            armMusicAutoplay();
-            document.addEventListener('pointerdown', unlockLandingMusic, true);
-            document.addEventListener('keydown', unlockLandingMusic, true);
+            // Piano starts on OPEN, not on landing on this screen
             updateMusicButton();
         }
 
@@ -2475,7 +2502,8 @@
         updateMusicButton();
 
         function nextQuestion() {
-            startSoftMusic();
+            // Do not restart piano — it should keep playing from OPEN
+            startSoftMusic({ restart: false });
             currentLevel++;
 
             const container = document.getElementById('main-container');
