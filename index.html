@@ -1248,6 +1248,15 @@
             opacity: 0.7;
         }
 
+        .music-toggle.pending {
+            animation: musicPulse 1.4s ease-in-out infinite;
+        }
+
+        @keyframes musicPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 8px 22px rgba(28, 42, 46, 0.16); }
+            50% { transform: scale(1.06); box-shadow: 0 10px 26px rgba(196, 92, 106, 0.28); }
+        }
+
         @media (min-width: 900px) {
             .wishes-heading {
                 font-size: 1.8rem;
@@ -1647,8 +1656,8 @@
         </div>
     </div>
 
-    <audio id="wait-music" src="assets/wait-theme.mp3" loop preload="auto" playsinline autoplay></audio>
-    <audio id="bg-music" src="assets/happy-birthday-piano.mp3" loop preload="auto" playsinline></audio>
+    <audio id="wait-music" src="assets/wait-theme.mp3" loop preload="auto" playsinline webkit-playsinline autoplay></audio>
+    <audio id="bg-music" src="assets/happy-birthday-piano.mp3" loop preload="auto" playsinline webkit-playsinline></audio>
     <button type="button" class="music-toggle" id="music-toggle" aria-label="Mute music" title="Music on · tap to mute">♪</button>
 
     <script>
@@ -1914,11 +1923,11 @@
         }
 
         /* Wait page theme, then birthday piano after unlock.
-           Music is ON by default; the button only mutes/unmutes. */
-        const WAIT_MUSIC_SRC = 'assets/wait-theme.mp3';
-        const MUSIC_SRC = 'assets/happy-birthday-piano.mp3';
-        const MUSIC_VOLUME = 0.7;
-        const WAIT_MUSIC_VOLUME = 0.88;
+           Music is ON by default; the button only mutes once it is audible. */
+        const WAIT_MUSIC_SRC = new URL('assets/wait-theme.mp3', document.baseURI).href;
+        const MUSIC_SRC = new URL('assets/happy-birthday-piano.mp3', document.baseURI).href;
+        const MUSIC_VOLUME = 0.72;
+        const WAIT_MUSIC_VOLUME = 0.9;
         const MUSIC_DUCKED = 0.22;
 
         let bgMusic = null;
@@ -1928,106 +1937,121 @@
         let waitMusicStarted = false;
         let waitTommyRunning = false;
         let musicUnlockBound = false;
+        let musicRetryTimer = null;
+        let musicAudioCtx = null;
+
+        function musicSrcFor(el, fallback) {
+            if (!el) return fallback;
+            const current = el.getAttribute('src');
+            if (current && !current.startsWith('http') && !current.startsWith('blob:')) {
+                el.src = fallback;
+            } else if (!current) {
+                el.src = fallback;
+            }
+            return el;
+        }
 
         function ensureWaitMusic() {
             if (waitMusic) return waitMusic;
-            waitMusic = document.getElementById('wait-music') || new Audio(WAIT_MUSIC_SRC);
+            waitMusic = document.getElementById('wait-music') || new Audio();
+            musicSrcFor(waitMusic, WAIT_MUSIC_SRC);
             waitMusic.loop = true;
             waitMusic.preload = 'auto';
             waitMusic.setAttribute('playsinline', '');
-            try { waitMusic.load(); } catch (_) {}
+            waitMusic.setAttribute('webkit-playsinline', 'true');
             waitMusic.volume = musicEnabled ? WAIT_MUSIC_VOLUME : 0;
             return waitMusic;
         }
 
         function ensureBgMusic() {
             if (bgMusic) return bgMusic;
-            bgMusic = document.getElementById('bg-music') || new Audio(MUSIC_SRC);
+            bgMusic = document.getElementById('bg-music') || new Audio();
+            musicSrcFor(bgMusic, MUSIC_SRC);
             bgMusic.loop = true;
             bgMusic.preload = 'auto';
             bgMusic.setAttribute('playsinline', '');
+            bgMusic.setAttribute('webkit-playsinline', 'true');
             bgMusic.volume = musicEnabled ? MUSIC_VOLUME : 0;
             return bgMusic;
         }
 
         function activeMusicEl() {
-            if (!siteUnlocked) return ensureWaitMusic();
-            return ensureBgMusic();
+            return siteUnlocked ? ensureBgMusic() : ensureWaitMusic();
+        }
+
+        function activeMusicVolume() {
+            return siteUnlocked ? MUSIC_VOLUME : WAIT_MUSIC_VOLUME;
         }
 
         function isMusicPlaying() {
             const audio = activeMusicEl();
-            return !!(audio && musicEnabled && !audio.paused && !audio.ended && !audio.muted && audio.volume > 0);
+            return !!(audio && musicEnabled && !audio.paused && !audio.ended && !audio.muted && audio.volume > 0.01);
+        }
+
+        function unlockAudioContext() {
+            try {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (!AC) return;
+                if (!musicAudioCtx) musicAudioCtx = new AC();
+                if (musicAudioCtx.state === 'suspended') musicAudioCtx.resume();
+            } catch (_) {}
         }
 
         function stopWaitMusic() {
             if (!waitMusic) return;
             waitMusic.pause();
             waitMusic.muted = false;
-            waitMusic.currentTime = 0;
+            try { waitMusic.currentTime = 0; } catch (_) {}
         }
 
         function playAudioElement(audio, volume) {
             if (!audio) return Promise.resolve(false);
+            unlockAudioContext();
             audio.muted = false;
             audio.volume = volume;
             const result = audio.play();
             if (result && typeof result.then === 'function') {
-                return result.then(() => true).catch(() => false);
+                return result.then(() => !audio.paused && !audio.muted).catch(() => false);
             }
-            return Promise.resolve(!audio.paused);
+            return Promise.resolve(!audio.paused && !audio.muted);
         }
 
         function startWaitMusic() {
             if (siteUnlocked || !musicEnabled) {
                 updateMusicButton();
-                return;
+                return Promise.resolve(false);
             }
             const audio = ensureWaitMusic();
             if (bgMusic) {
                 bgMusic.pause();
-                bgMusic.currentTime = 0;
+                try { bgMusic.currentTime = 0; } catch (_) {}
             }
             waitMusicStarted = true;
-
-            const finish = (ok) => {
+            return playAudioElement(audio, WAIT_MUSIC_VOLUME).then((ok) => {
                 updateMusicButton();
-                if (!ok) bindMusicUnlockGestures();
-            };
-
-            playAudioElement(audio, WAIT_MUSIC_VOLUME).then((ok) => {
-                if (ok) {
-                    finish(true);
-                    return;
-                }
-                audio.muted = true;
-                audio.volume = WAIT_MUSIC_VOLUME;
-                const mutedPlay = audio.play();
-                const afterMuted = () => {
-                    try { audio.muted = false; } catch (_) {}
-                    finish(!audio.paused && !audio.muted);
-                };
-                if (mutedPlay && typeof mutedPlay.then === 'function') {
-                    mutedPlay.then(afterMuted).catch(() => finish(false));
-                } else {
-                    afterMuted();
-                }
+                if (!ok) armMusicAutoplay();
+                return ok;
             });
         }
 
         function startSoftMusic() {
             if (!siteUnlocked || !musicEnabled) {
                 updateMusicButton();
-                return;
+                return Promise.resolve(false);
             }
             stopWaitMusic();
             const audio = ensureBgMusic();
             musicStarted = true;
-
-            playAudioElement(audio, MUSIC_VOLUME).then((ok) => {
+            return playAudioElement(audio, MUSIC_VOLUME).then((ok) => {
                 updateMusicButton();
-                if (!ok) bindMusicUnlockGestures();
+                if (!ok) armMusicAutoplay();
+                return ok;
             });
+        }
+
+        function ensureDesiredMusic() {
+            if (!musicEnabled) return Promise.resolve(false);
+            return siteUnlocked ? startSoftMusic() : startWaitMusic();
         }
 
         function setMusicDuck(duck) {
@@ -2035,28 +2059,56 @@
             bgMusic.volume = duck ? MUSIC_DUCKED : MUSIC_VOLUME;
         }
 
-        function bindMusicUnlockGestures() {
-            if (musicUnlockBound || !musicEnabled) return;
+        function armMusicAutoplay() {
+            const audio = activeMusicEl();
+
+            const tryPlay = () => {
+                if (!musicEnabled || isMusicPlaying()) return;
+                ensureDesiredMusic();
+            };
+
+            ['canplay', 'canplaythrough', 'loadeddata', 'loadedmetadata'].forEach((ev) => {
+                audio.addEventListener(ev, tryPlay);
+            });
+
+            if (!musicRetryTimer) {
+                let ticks = 0;
+                musicRetryTimer = setInterval(() => {
+                    ticks += 1;
+                    tryPlay();
+                    if (isMusicPlaying() || ticks > 40) {
+                        clearInterval(musicRetryTimer);
+                        musicRetryTimer = null;
+                    }
+                }, 250);
+            }
+
+            if (musicUnlockBound) return;
             musicUnlockBound = true;
 
             const resume = (e) => {
                 if (!musicEnabled) return;
+                // Music button has its own handler; still allow other taps to start audio
                 if (e && e.target && e.target.closest && e.target.closest('#music-toggle')) return;
-                if (siteUnlocked) startSoftMusic();
-                else startWaitMusic();
+                unlockAudioContext();
+                const a = activeMusicEl();
+                a.muted = false;
+                a.volume = activeMusicVolume();
+                ensureDesiredMusic().then((ok) => {
+                    if (ok || isMusicPlaying()) {
+                        ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown', 'scroll'].forEach((ev) => {
+                            document.removeEventListener(ev, resume, true);
+                        });
+                        musicUnlockBound = false;
+                    }
+                });
                 const video = document.getElementById('wait-tommy-video');
                 if (video && video.paused && !siteUnlocked) video.play().catch(() => {});
-                if (isMusicPlaying()) {
-                    document.removeEventListener('pointerdown', resume, true);
-                    document.removeEventListener('touchstart', resume, true);
-                    document.removeEventListener('keydown', resume, true);
-                    musicUnlockBound = false;
-                }
             };
 
-            document.addEventListener('pointerdown', resume, true);
-            document.addEventListener('touchstart', resume, true);
-            document.addEventListener('keydown', resume, true);
+            ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown', 'scroll'].forEach((ev) => {
+                document.addEventListener(ev, resume, true);
+            });
         }
 
         function toggleSoftMusic(e) {
@@ -2065,8 +2117,19 @@
                 e.stopPropagation();
             }
 
-            // Button only mutes / unmutes — music is on by default
-            if (musicEnabled) {
+            unlockAudioContext();
+
+            // If music should be on but isn't audible yet, first tap starts it (does not mute)
+            if (musicEnabled && !isMusicPlaying()) {
+                const audio = activeMusicEl();
+                audio.muted = false;
+                audio.volume = activeMusicVolume();
+                ensureDesiredMusic();
+                updateMusicButton();
+                return;
+            }
+
+            if (musicEnabled && isMusicPlaying()) {
                 musicEnabled = false;
                 const audio = activeMusicEl();
                 if (audio) {
@@ -2079,18 +2142,23 @@
             }
 
             musicEnabled = true;
-            if (siteUnlocked) startSoftMusic();
-            else startWaitMusic();
+            ensureDesiredMusic();
+            updateMusicButton();
         }
 
         function updateMusicButton() {
             const btn = document.getElementById('music-toggle');
             if (!btn) return;
+            const playing = isMusicPlaying();
             btn.textContent = musicEnabled ? '♪' : '♩';
             btn.classList.toggle('muted', !musicEnabled);
-            btn.setAttribute('aria-label', musicEnabled ? 'Mute music' : 'Unmute music');
-            btn.title = musicEnabled ? 'Music on · tap to mute' : 'Music muted · tap to play';
+            btn.classList.toggle('pending', musicEnabled && !playing);
+            btn.setAttribute('aria-label', !musicEnabled ? 'Unmute music' : (playing ? 'Mute music' : 'Music starting · tap if silent'));
+            btn.title = !musicEnabled
+                ? 'Music muted · tap to play'
+                : (playing ? 'Music on · tap to mute' : 'Music on · tap if you hear nothing');
         }
+
 
         function stopWaitTommy() {
             waitTommyRunning = false;
@@ -2160,12 +2228,8 @@
         function enableWaitExperience() {
             ensureWaitMusic();
             startWaitTommyChroma();
-            startWaitMusic();
-            const audio = ensureWaitMusic();
-            audio.addEventListener('canplaythrough', () => {
-                if (musicEnabled && !siteUnlocked) startWaitMusic();
-            }, { once: true });
-            bindMusicUnlockGestures();
+            ensureDesiredMusic();
+            armMusicAutoplay();
             updateMusicButton();
         }
 
@@ -2181,7 +2245,7 @@
         function unlockLandingMusic(e) {
             if (!siteUnlocked || !musicEnabled) return;
             if (e.target && e.target.closest && e.target.closest('#music-toggle')) return;
-            startSoftMusic();
+            ensureDesiredMusic();
             if (isMusicPlaying()) {
                 document.removeEventListener('pointerdown', unlockLandingMusic, true);
                 document.removeEventListener('keydown', unlockLandingMusic, true);
@@ -2210,8 +2274,8 @@
                 });
             }
 
-            startSoftMusic();
-            bindMusicUnlockGestures();
+            ensureDesiredMusic();
+            armMusicAutoplay();
             document.addEventListener('pointerdown', unlockLandingMusic, true);
             document.addEventListener('keydown', unlockLandingMusic, true);
             updateMusicButton();
