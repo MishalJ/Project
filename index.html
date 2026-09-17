@@ -1458,6 +1458,8 @@
             grid-template-columns: repeat(4, minmax(72px, 1fr));
             gap: 12px;
             width: min(440px, 100%);
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .wait-unit {
@@ -1487,17 +1489,18 @@
         }
 
         .wait-opens {
-            margin: 1rem 0 0;
+            margin: 1rem auto 0;
             font-size: 0.85rem;
             color: #6d787c;
             letter-spacing: 0.02em;
+            text-align: center;
         }
 
         .wait-timer-area {
             position: relative;
-            width: min(560px, 96vw);
-            margin-top: 1.6rem;
-            padding-left: clamp(160px, 34vw, 220px);
+            width: min(440px, 86vw);
+            margin: 1.6rem auto 0;
+            padding-left: 0;
             min-height: clamp(170px, 34vw, 220px);
         }
 
@@ -1509,7 +1512,8 @@
         .wait-tommy {
             position: absolute;
             bottom: -4px;
-            left: -14px;
+            left: auto;
+            right: calc(100% + 10px);
             width: clamp(160px, 34vw, 220px);
             height: clamp(160px, 34vw, 220px);
             pointer-events: none;
@@ -1520,32 +1524,29 @@
 
         @keyframes tommyWalkFromLeft {
             0% {
-                left: -18px;
                 opacity: 0;
-                transform: translate3d(0, 6px, 0);
+                transform: translate3d(-36px, 6px, 0);
             }
             12% {
                 opacity: 1;
-                transform: translate3d(0, 0, 0);
+                transform: translate3d(-28px, 0, 0);
             }
-            30% { transform: translate3d(0, -5px, 0); }
-            48% { transform: translate3d(0, 0, 0); }
-            66% { transform: translate3d(0, -4px, 0); }
+            30% { transform: translate3d(-20px, -5px, 0); }
+            48% { transform: translate3d(-12px, 0, 0); }
+            66% { transform: translate3d(-6px, -4px, 0); }
             82% {
-                left: 0;
                 opacity: 1;
                 transform: translate3d(0, 2px, 0);
             }
             100% {
-                left: 0;
                 opacity: 1;
                 transform: translate3d(0, 0, 0);
             }
         }
 
         .wait-tommy.is-seated {
-            left: 0;
-            right: auto;
+            left: auto;
+            right: calc(100% + 10px);
             opacity: 1;
             animation: tommySeatedBreath 3.8s ease-in-out infinite;
         }
@@ -1586,14 +1587,19 @@
             }
 
             .wait-timer-area {
-                padding-left: 140px;
-                padding-right: 0;
+                width: min(360px, 78vw);
+                padding-left: 0;
                 min-height: 150px;
             }
 
             .wait-tommy {
-                width: 136px;
-                height: 136px;
+                width: 120px;
+                height: 120px;
+                right: calc(100% + 4px);
+            }
+
+            .wait-tommy.is-seated {
+                right: calc(100% + 4px);
             }
         }
     </style>
