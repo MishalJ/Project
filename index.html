@@ -1308,13 +1308,35 @@
         }
 
         .wait-copy {
-            margin: 0.35rem 0 0;
-            max-width: 28ch;
+            margin: 0.85rem 0 0;
+            max-width: 34ch;
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.15rem;
+            font-size: clamp(1.05rem, 3.4vw, 1.25rem);
             font-style: italic;
-            color: rgba(28, 42, 46, 0.72);
-            line-height: 1.45;
+            font-weight: 500;
+            color: rgba(28, 42, 46, 0.78);
+            line-height: 1.55;
+        }
+
+        .wait-poem {
+            margin: 0.85rem 0 0;
+            max-width: 36ch;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.05rem, 3.5vw, 1.28rem);
+            font-weight: 500;
+            color: rgba(28, 42, 46, 0.82);
+            line-height: 1.65;
+            text-wrap: balance;
+        }
+
+        .wait-poem p {
+            margin: 0 0 0.55rem;
+        }
+
+        .wait-poem p:last-child {
+            margin-bottom: 0;
+            font-style: italic;
+            color: var(--teal);
         }
 
         .wait-countdown {
@@ -1363,7 +1385,12 @@
     <div id="wait-gate" aria-live="polite">
         <p class="wait-kicker">A surprise is waiting</p>
         <h1 class="wait-title">Almost time,<br>Jinsa</h1>
-        <p class="wait-copy">This little world opens at 12:01 on 28 September 2026.</p>
+        <div class="wait-poem">
+            <p>Three weeks of hard work,<br>folded into silence and starlight,</p>
+            <p>so that on your day,<br>this little world could open for you alone.</p>
+            <p>Every late night was a love letter.<br>Every careful detail was my way of holding you.</p>
+            <p>Wait with me a little longer.<br>When your birthday begins, so does everything I made for your heart.</p>
+        </div>
         <div class="wait-countdown" id="wait-countdown" aria-label="Countdown to unlock">
             <div class="wait-unit"><strong id="cd-days">0</strong><span>Days</span></div>
             <div class="wait-unit"><strong id="cd-hours">0</strong><span>Hours</span></div>
