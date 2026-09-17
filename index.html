@@ -1282,11 +1282,15 @@
         body.is-locked #main-container,
         body.is-locked #message-box,
         body.is-locked .hanging-note,
-        body.is-locked .music-toggle,
         body.is-locked #coupon-world,
-        body.is-locked #tommy-bg,
-        body.is-locked #bg-music {
+        body.is-locked #tommy-bg {
             display: none !important;
+        }
+
+        body.is-locked .music-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .wait-kicker {
@@ -1382,155 +1386,52 @@
 
         .wait-timer-area {
             position: relative;
-            width: min(420px, 100%);
-            margin-top: 1.45rem;
-            padding-right: 92px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 8px;
+            width: min(460px, 100%);
+            margin-top: 1.35rem;
         }
 
         .wait-timer-area .wait-countdown {
             margin-top: 0;
-            width: 100%;
+            flex: 1 1 auto;
+            width: auto;
+            min-width: 0;
         }
 
-        .wait-cat {
-            position: absolute;
-            right: 0;
-            bottom: -2px;
-            width: 78px;
-            height: 78px;
-            z-index: 3;
+        .wait-tommy {
+            position: relative;
+            flex: 0 0 auto;
+            width: clamp(92px, 22vw, 128px);
+            height: clamp(92px, 22vw, 128px);
             pointer-events: none;
+        }
+
+        .wait-tommy video {
+            position: absolute;
+            width: 1px;
+            height: 1px;
             opacity: 0;
-            animation: tommyWalkIn 7.2s cubic-bezier(0.42, 0.02, 0.28, 1) forwards;
+            pointer-events: none;
         }
 
-        .wait-cat-inner {
+        .wait-tommy canvas {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 3px solid rgba(255, 250, 246, 0.96);
-            box-shadow:
-                0 14px 28px rgba(28, 42, 46, 0.2),
-                inset 0 0 0 1px rgba(255, 255, 255, 0.35);
-            background: #1a1a1a;
-            transform-origin: 50% 80%;
-        }
-
-        .wait-cat img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 18%;
             display: block;
-        }
-
-        .wait-cat-paw {
-            position: absolute;
-            width: 14px;
-            height: 10px;
-            border-radius: 40% 40% 50% 50%;
-            background: #111;
-            bottom: 2px;
-            opacity: 0.85;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
-        }
-
-        .wait-cat-paw.left { left: 16px; }
-        .wait-cat-paw.right { right: 16px; }
-
-        .wait-cat-shadow {
-            position: absolute;
-            left: 50%;
-            bottom: -6px;
-            width: 54px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(28, 42, 46, 0.18);
-            transform: translateX(-50%);
-            filter: blur(2px);
-            z-index: -1;
-        }
-
-        @keyframes tommyWalkIn {
-            0% {
-                right: auto;
-                left: -18%;
-                opacity: 0;
-                transform: translate3d(0, 10px, 0) scaleX(-1);
-            }
-            6% { opacity: 1; }
-            12% { transform: translate3d(0, 0, 0) scaleX(-1); }
-            18% { transform: translate3d(0, -8px, 0) scaleX(-1); }
-            24% { transform: translate3d(0, 0, 0) scaleX(-1); }
-            32% { transform: translate3d(0, -7px, 0) scaleX(-1); }
-            40% { transform: translate3d(0, 0, 0) scaleX(-1); }
-            48% { transform: translate3d(0, -8px, 0) scaleX(-1); }
-            56% { transform: translate3d(0, 0, 0) scaleX(-1); }
-            64% { transform: translate3d(0, -6px, 0) scaleX(-1); }
-            74% {
-                left: auto;
-                right: 0;
-                transform: translate3d(0, 0, 0) scaleX(-1);
-            }
-            84% {
-                left: auto;
-                right: 0;
-                transform: translate3d(0, 4px, 0) scaleX(1);
-            }
-            100% {
-                left: auto;
-                right: 0;
-                opacity: 1;
-                transform: translate3d(0, 0, 0) scaleX(1);
-            }
-        }
-
-        .wait-cat.is-walking .wait-cat-paw.left {
-            animation: tommyPaw 0.55s ease-in-out infinite;
-        }
-
-        .wait-cat.is-walking .wait-cat-paw.right {
-            animation: tommyPaw 0.55s ease-in-out infinite reverse;
-        }
-
-        .wait-cat.is-walking .wait-cat-shadow {
-            animation: tommyShadow 0.55s ease-in-out infinite;
-        }
-
-        @keyframes tommyPaw {
-            0%, 100% { transform: translateY(0); opacity: 0.55; }
-            50% { transform: translateY(-3px); opacity: 0.9; }
-        }
-
-        @keyframes tommyShadow {
-            0%, 100% { width: 54px; opacity: 0.22; }
-            50% { width: 42px; opacity: 0.14; }
-        }
-
-        .wait-cat.is-sitting .wait-cat-inner {
-            animation: tommyLook 4.2s ease-in-out infinite;
-        }
-
-        .wait-cat.is-sitting .wait-cat-paw {
-            opacity: 0;
-        }
-
-        @keyframes tommyLook {
-            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-            35% { transform: translateY(-2px) rotate(-2.5deg) scale(1.02); }
-            70% { transform: translateY(0) rotate(2deg) scale(1.01); }
+            object-fit: contain;
         }
 
         @media (max-width: 480px) {
             .wait-timer-area {
-                padding-right: 78px;
-                width: min(100%, 360px);
+                gap: 4px;
             }
 
-            .wait-cat {
-                width: 66px;
-                height: 66px;
+            .wait-tommy {
+                width: 84px;
+                height: 84px;
             }
         }
     </style>
@@ -1546,19 +1447,15 @@
             <p>Wait with me a little longer.<br>When your birthday begins, so does everything I made for your heart.</p>
         </div>
         <div class="wait-timer-area">
-            <div class="wait-cat is-walking" id="wait-cat" aria-hidden="true">
-                <span class="wait-cat-shadow"></span>
-                <div class="wait-cat-inner">
-                    <img src="assets/tommy.png" alt="">
-                </div>
-                <span class="wait-cat-paw left"></span>
-                <span class="wait-cat-paw right"></span>
-            </div>
             <div class="wait-countdown" id="wait-countdown" aria-label="Countdown to unlock">
                 <div class="wait-unit"><strong id="cd-days">0</strong><span>Days</span></div>
                 <div class="wait-unit"><strong id="cd-hours">0</strong><span>Hours</span></div>
                 <div class="wait-unit"><strong id="cd-mins">0</strong><span>Mins</span></div>
                 <div class="wait-unit"><strong id="cd-secs">0</strong><span>Secs</span></div>
+            </div>
+            <div class="wait-tommy" aria-hidden="true">
+                <video id="wait-tommy-video" src="videos/tommy-wait.mp4" muted loop playsinline preload="auto"></video>
+                <canvas id="wait-tommy-canvas"></canvas>
             </div>
         </div>
         <p class="wait-opens" id="wait-opens-label">Opens 28 Sep 2026 · 12:01 AM London time</p>
@@ -1697,8 +1594,9 @@
         </div>
     </div>
 
+    <audio id="wait-music" src="assets/wait-theme.mp3" loop preload="auto" playsinline></audio>
     <audio id="bg-music" src="assets/happy-birthday-piano.mp3" loop preload="auto" playsinline></audio>
-    <button type="button" class="music-toggle" id="music-toggle" aria-label="Play birthday music" title="Tap to play music">♪</button>
+    <button type="button" class="music-toggle" id="music-toggle" aria-label="Play music" title="Tap to play music">♪</button>
 
     <script>
         /* Access: localhost / early preview anytime; everyone else from 28 Sep 2026 00:01 London (BST) */
@@ -1731,6 +1629,10 @@
         }
 
         function isSiteUnlocked() {
+            const params = new URLSearchParams(location.search);
+            // Force the countdown/timeline page for local preview: ?wait=1
+            if (params.get('wait') === '1') return false;
+
             grantLocalPreview();
             if (isLocalDevHost() || hasPreviewAccess()) return true;
             return Date.now() >= UNLOCK_AT.getTime();
@@ -1767,6 +1669,8 @@
                 clearInterval(unlockTimer);
                 unlockTimer = null;
             }
+            if (typeof stopWaitTommy === 'function') stopWaitTommy();
+            if (typeof stopWaitMusic === 'function') stopWaitMusic();
             if (typeof onSiteUnlock === 'function') onSiteUnlock();
         }
 
@@ -1788,14 +1692,6 @@
             document.body.classList.add('is-open');
         } else {
             lockSite();
-            const waitCat = document.getElementById('wait-cat');
-            if (waitCat) {
-                waitCat.addEventListener('animationend', (e) => {
-                    if (e.animationName !== 'tommyWalkIn') return;
-                    waitCat.classList.remove('is-walking');
-                    waitCat.classList.add('is-sitting');
-                });
-            }
         }
 
         const questions = [
@@ -1963,14 +1859,29 @@
             startSoftMusic();
         }
 
-        /* Happy Birthday piano — starts on this OPEN screen, loops forever */
+        /* Wait page theme, then birthday piano after unlock */
+        const WAIT_MUSIC_SRC = 'assets/wait-theme.mp3';
         const MUSIC_SRC = 'assets/happy-birthday-piano.mp3';
         const MUSIC_VOLUME = 0.7;
+        const WAIT_MUSIC_VOLUME = 0.62;
         const MUSIC_DUCKED = 0.22;
 
         let bgMusic = null;
+        let waitMusic = null;
         let musicEnabled = true;
         let musicStarted = false;
+        let waitMusicStarted = false;
+        let waitTommyRunning = false;
+
+        function ensureWaitMusic() {
+            if (waitMusic) return waitMusic;
+            waitMusic = document.getElementById('wait-music') || new Audio(WAIT_MUSIC_SRC);
+            waitMusic.loop = true;
+            waitMusic.preload = 'auto';
+            waitMusic.setAttribute('playsinline', '');
+            waitMusic.volume = musicEnabled ? WAIT_MUSIC_VOLUME : 0;
+            return waitMusic;
+        }
 
         function ensureBgMusic() {
             if (bgMusic) return bgMusic;
@@ -1982,12 +1893,48 @@
             return bgMusic;
         }
 
+        function activeMusicEl() {
+            if (!siteUnlocked) return ensureWaitMusic();
+            return ensureBgMusic();
+        }
+
         function isMusicPlaying() {
-            return !!(bgMusic && musicEnabled && !bgMusic.paused && !bgMusic.ended);
+            const audio = activeMusicEl();
+            return !!(audio && musicEnabled && !audio.paused && !audio.ended);
+        }
+
+        function stopWaitMusic() {
+            if (!waitMusic) return;
+            waitMusic.pause();
+            waitMusic.currentTime = 0;
+        }
+
+        function startWaitMusic() {
+            if (siteUnlocked) return;
+            const audio = ensureWaitMusic();
+            if (!musicEnabled) {
+                audio.volume = 0;
+                updateMusicButton();
+                return;
+            }
+            if (bgMusic) {
+                bgMusic.pause();
+                bgMusic.currentTime = 0;
+            }
+            audio.volume = WAIT_MUSIC_VOLUME;
+            waitMusicStarted = true;
+            const playPromise = audio.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+                playPromise.catch(() => {
+                    setTimeout(() => audio.play().catch(() => {}), 150);
+                });
+            }
+            updateMusicButton();
         }
 
         function startSoftMusic() {
             if (!siteUnlocked) return;
+            stopWaitMusic();
             const audio = ensureBgMusic();
 
             if (!musicEnabled) {
@@ -2009,18 +1956,18 @@
         }
 
         function setMusicDuck(duck) {
-            if (!bgMusic || !musicEnabled) return;
+            if (!siteUnlocked || !bgMusic || !musicEnabled) return;
             bgMusic.volume = duck ? MUSIC_DUCKED : MUSIC_VOLUME;
         }
 
         function toggleSoftMusic(e) {
             if (e) e.stopPropagation();
-            const audio = ensureBgMusic();
+            const audio = activeMusicEl();
 
-            // First tap on ♪ (or when paused) always starts music on this screen
             if (!isMusicPlaying()) {
                 musicEnabled = true;
-                startSoftMusic();
+                if (siteUnlocked) startSoftMusic();
+                else startWaitMusic();
                 return;
             }
 
@@ -2036,12 +1983,85 @@
             const playing = isMusicPlaying();
             btn.textContent = musicEnabled ? '♪' : '♩';
             btn.classList.toggle('muted', !musicEnabled || !playing);
-            btn.setAttribute('aria-label', playing ? 'Mute birthday music' : 'Play birthday music');
+            btn.setAttribute('aria-label', playing ? 'Mute music' : 'Play music');
             btn.title = playing ? 'Music on · tap to mute' : 'Tap to play music';
+        }
+
+        function stopWaitTommy() {
+            waitTommyRunning = false;
+            const video = document.getElementById('wait-tommy-video');
+            if (video) {
+                video.pause();
+            }
+        }
+
+        function startWaitTommyChroma() {
+            const video = document.getElementById('wait-tommy-video');
+            const canvas = document.getElementById('wait-tommy-canvas');
+            if (!video || !canvas || siteUnlocked || waitTommyRunning) return;
+
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            waitTommyRunning = true;
+            video.muted = true;
+            video.loop = true;
+            video.playsInline = true;
+
+            const playPromise = video.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+                playPromise.catch(() => {});
+            }
+
+            function draw() {
+                if (!waitTommyRunning || siteUnlocked) return;
+
+                if (video.readyState >= 2 && video.videoWidth) {
+                    const targetW = 240;
+                    const scale = targetW / video.videoWidth;
+                    const w = targetW;
+                    const h = Math.max(1, Math.round(video.videoHeight * scale));
+                    if (canvas.width !== w || canvas.height !== h) {
+                        canvas.width = w;
+                        canvas.height = h;
+                    }
+                    ctx.drawImage(video, 0, 0, w, h);
+                    const frame = ctx.getImageData(0, 0, w, h);
+                    const data = frame.data;
+                    for (let i = 0; i < data.length; i += 4) {
+                        const r = data[i];
+                        const g = data[i + 1];
+                        const b = data[i + 2];
+                        if (g > 75 && g > r + 25 && g > b + 25) {
+                            const key = Math.min(1, (g - Math.max(r, b)) / 85);
+                            data[i + 3] = Math.round(data[i + 3] * (1 - key));
+                        }
+                    }
+                    ctx.putImageData(frame, 0, 0);
+                }
+
+                requestAnimationFrame(draw);
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        function enableWaitExperience() {
+            startWaitTommyChroma();
+            startWaitMusic();
+            const unlockWaitAudio = (e) => {
+                if (siteUnlocked) return;
+                if (e.target && e.target.closest && e.target.closest('#music-toggle')) return;
+                startWaitMusic();
+                const video = document.getElementById('wait-tommy-video');
+                if (video && video.paused) video.play().catch(() => {});
+            };
+            document.addEventListener('pointerdown', unlockWaitAudio, true);
+            document.addEventListener('keydown', unlockWaitAudio, true);
+            updateMusicButton();
         }
 
         document.getElementById('music-toggle').addEventListener('click', toggleSoftMusic);
         ensureBgMusic();
+        ensureWaitMusic();
 
         function unlockLandingMusic(e) {
             if (!siteUnlocked || !musicEnabled) return;
@@ -2056,6 +2076,9 @@
         function enableOpenExperience() {
             if (openExperienceReady) return;
             openExperienceReady = true;
+
+            stopWaitTommy();
+            stopWaitMusic();
 
             setPetalPathMode(true);
             spawnPetalPathBurst(18);
@@ -2083,6 +2106,8 @@
 
         if (siteUnlocked) {
             enableOpenExperience();
+        } else {
+            enableWaitExperience();
         }
 
         function nextQuestion() {
