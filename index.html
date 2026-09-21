@@ -735,7 +735,7 @@
         .balloon-row {
             display: flex;
             justify-content: center;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;
             gap: clamp(14px, 3.5vw, 36px);
             padding: 8px 0 12px;
             align-items: flex-end;
@@ -902,6 +902,13 @@
         }
 
         .balloon--jj::after { border-top-color: #8a6a2a; }
+
+        .balloon--ash {
+            background: linear-gradient(160deg, #d7c4f0, #7a5ea8 55%, #4d3a73);
+            animation-delay: 1.9s;
+        }
+
+        .balloon--ash::after { border-top-color: #4d3a73; }
 
         .wish-egg:nth-child(odd) .balloon { animation-duration: 3.2s; }
         .wish-egg:nth-child(even) .balloon { animation-duration: 3.8s; }
@@ -1880,7 +1887,8 @@
             { src: 'videos/Jay.mp4', from: 'Jay', tone: 'jay' },
             { src: 'videos/Seles.mp4', from: 'Seles', tone: 'seles' },
             { src: 'videos/Tommy.mp4', from: 'Tommy', tone: 'tommy' },
-            { src: 'videos/JJ.mp4', from: 'J&J', tone: 'jj' }
+            { src: 'videos/JJ.mp4', from: 'J&J', tone: 'jj' },
+            { src: 'videos/Ash.mp4', from: 'Ash', tone: 'ash' }
         ];
 
         let currentLevel = 0;
