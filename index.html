@@ -8,7 +8,7 @@
     <title>Happy Birthday, Jinsa</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --ink: #1c2a2e;
@@ -426,6 +426,19 @@
             animation: hangDrop 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
+        .hanging-note.left {
+            right: auto;
+            left: clamp(12px, 3vw, 36px);
+        }
+
+        .hanging-note.left.visible {
+            animation-delay: 1.15s;
+        }
+
+        .hanging-note.left .hanging-tab {
+            background: linear-gradient(145deg, #f7f1e4, #e5d3b4 55%, #d3bc93);
+        }
+
         @keyframes noteSway {
             0%, 100% { transform: rotate(-1.8deg); }
             50% { transform: rotate(2deg); }
@@ -537,6 +550,23 @@
             line-height: 1.2;
         }
 
+        .hanging-tab-heart {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            font-weight: 500;
+            letter-spacing: 0;
+            text-transform: none;
+            color: var(--rose);
+            background: rgba(255, 255, 255, 0.55);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 10px rgba(28, 42, 46, 0.2);
+        }
+
         .hanging-note.open .hanging-tab {
             display: none;
         }
@@ -544,10 +574,13 @@
         .hanging-panel {
             display: none;
             position: relative;
-            max-height: min(72vh, 620px);
+            max-height: min(68vh, calc(100dvh - 100px));
+            overflow-x: hidden;
             overflow-y: auto;
+            overscroll-behavior: contain;
             -webkit-overflow-scrolling: touch;
-            padding: 22px 18px 18px;
+            padding: 22px 18px 22px;
+            width: 100%;
             border-radius: 16px;
             background:
                 linear-gradient(165deg, #fffaf4 0%, #f7e6da 100%);
@@ -559,6 +592,10 @@
 
         .hanging-note.open .hanging-panel {
             display: block;
+        }
+
+        .hanging-note.left .hanging-panel {
+            max-height: min(72vh, calc(100dvh - 96px));
         }
 
         .hanging-close {
@@ -590,6 +627,12 @@
             margin: 0 36px 12px 0;
             min-height: 0;
             text-align: left;
+        }
+
+        .hanging-panel h2.poem-title {
+            font-weight: 700;
+            font-style: normal;
+            letter-spacing: 0.01em;
         }
 
         .hanging-panel .poem-line {
@@ -689,6 +732,16 @@
             .hanging-note.open {
                 width: calc(100vw - 20px);
                 right: 10px;
+            }
+
+            .hanging-note.left {
+                left: 8px;
+                right: auto;
+            }
+
+            .hanging-note.left.open {
+                left: 10px;
+                right: auto;
             }
 
             .hanging-tab {
@@ -1609,6 +1662,139 @@
                 right: calc(100% + 4px);
             }
         }
+
+        /* Phone verification after countdown */
+        #phone-gate {
+            display: none;
+            position: relative;
+            z-index: 50;
+            width: min(440px, 92vw);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
+            padding: 1.5rem 1rem;
+            text-align: center;
+        }
+
+        body.is-verifying #phone-gate { display: flex; }
+
+        body.is-verifying #wait-gate,
+        body.is-verifying .wait-enter,
+        body.is-verifying #gift-container,
+        body.is-verifying #main-container,
+        body.is-verifying #message-box,
+        body.is-verifying .hanging-note,
+        body.is-verifying #coupon-world,
+        body.is-verifying #tommy-bg {
+            display: none !important;
+        }
+
+        body.is-verifying .music-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.is-locked #phone-gate {
+            display: none !important;
+        }
+
+        .phone-copy {
+            margin: 0.35rem 0 0.85rem;
+            max-width: 32ch;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.05rem, 3.4vw, 1.22rem);
+            font-style: italic;
+            color: rgba(28, 42, 46, 0.78);
+            line-height: 1.5;
+        }
+
+        #phone-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+        }
+
+        .phone-row {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .phone-row select,
+        .phone-row input {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            color: var(--ink);
+            background: rgba(255, 250, 246, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            border-radius: 16px;
+            box-shadow: 0 10px 24px rgba(28, 42, 46, 0.08);
+            outline: none;
+        }
+
+        .phone-row select {
+            flex: 0 0 auto;
+            min-width: 7.6rem;
+            padding: 14px 10px;
+            letter-spacing: 0;
+            cursor: pointer;
+            appearance: none;
+            background-image: linear-gradient(45deg, transparent 50%, #2f5d62 50%), linear-gradient(135deg, #2f5d62 50%, transparent 50%);
+            background-position: calc(100% - 16px) 50%, calc(100% - 11px) 50%;
+            background-size: 5px 5px, 5px 5px;
+            background-repeat: no-repeat;
+            padding-right: 28px;
+        }
+
+        .phone-row input {
+            flex: 1;
+            min-width: 0;
+            padding: 14px 14px;
+            letter-spacing: 0.04em;
+        }
+
+        .phone-row select:focus,
+        .phone-row input:focus {
+            border-color: rgba(47, 93, 98, 0.45);
+            box-shadow: 0 0 0 3px rgba(47, 93, 98, 0.12);
+        }
+
+        .phone-submit {
+            appearance: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            color: #fffaf6;
+            padding: 0.85rem 1.6rem;
+            border-radius: 999px;
+            background: linear-gradient(145deg, #c45c6a, #2f5d62 70%);
+            box-shadow:
+                0 16px 36px rgba(28, 42, 46, 0.28),
+                inset 0 1px 0 rgba(255, 255, 255, 0.28);
+        }
+
+        .phone-submit:hover {
+            transform: translateY(-1px);
+        }
+
+        .phone-error {
+            margin: 0;
+            min-height: 1.3em;
+            font-size: 0.88rem;
+            color: #a84554;
+            letter-spacing: 0.01em;
+        }
+
+        .phone-error[hidden] {
+            display: none;
+        }
     </style>
 </head>
 <body class="is-locked">
@@ -1640,6 +1826,28 @@
             </div>
         </div>
         <p class="wait-opens" id="wait-opens-label">Opens 28 Sep 2026 · 12:01 AM London time</p>
+    </div>
+
+    <div id="phone-gate" aria-live="polite">
+        <p class="wait-kicker">For Jinsa alone</p>
+        <h1 class="wait-title">One last check</h1>
+        <p class="phone-copy">When the waiting is over, only your number can open this world.</p>
+        <form id="phone-form" onsubmit="return false;" autocomplete="on">
+            <div class="phone-row">
+                <select id="phone-country" name="country" aria-label="Country code">
+                    <option value="44" selected>🇬🇧 +44</option>
+                    <option value="91">🇮🇳 +91</option>
+                    <option value="353">🇮🇪 +353</option>
+                    <option value="1">🇺🇸 +1</option>
+                    <option value="971">🇦🇪 +971</option>
+                    <option value="33">🇫🇷 +33</option>
+                    <option value="49">🇩🇪 +49</option>
+                </select>
+                <input id="phone-number" name="tel" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="7xxx xxxxxx" aria-label="Mobile number">
+            </div>
+            <button type="button" class="phone-submit" id="phone-submit">Open my gift</button>
+            <p class="phone-error" id="phone-error" hidden>This gift opens for one number only.</p>
+        </form>
     </div>
 
     <!-- Opening -->
@@ -1700,6 +1908,65 @@
             </section>
         </div>
     </div>
+
+    <aside class="hanging-note left" id="hanging-note-left" aria-label="Until the End, a poem for Jinsa">
+        <div class="rope-rail" aria-hidden="true">
+            <span class="rope left"></span>
+            <span class="rope right"></span>
+        </div>
+        <div class="hanging-body">
+            <button type="button" class="hanging-tab" id="hanging-tab-left" aria-expanded="false" aria-controls="hanging-panel-left">
+                <span class="hanging-tab-heart" aria-hidden="true">♡</span>
+                <span class="hanging-tab-label">Until the End</span>
+            </button>
+            <div class="hanging-panel" id="hanging-panel-left" hidden>
+                <button type="button" class="hanging-close" id="hanging-close-left" aria-label="Close poem">✕</button>
+                <h2 class="poem-title">Until the End</h2>
+                <p class="poem-line">He never wished for riches,</p>
+                <p class="poem-line">nor a name the world would know,</p>
+                <p class="poem-line">he only wished to build a life</p>
+                <p class="poem-line">where her hand would never let go.</p>
+                <div class="poem-break"></div>
+                <p class="poem-line">He wanted to give her everything,</p>
+                <p class="poem-line">the little things, the dreams, the days,</p>
+                <p class="poem-line">a home filled with their laughter,</p>
+                <p class="poem-line">and a thousand quiet ways</p>
+                <p class="poem-line">to say, “I love you.”</p>
+                <div class="poem-break"></div>
+                <p class="poem-line">He would make her mornings gentle,</p>
+                <p class="poem-line">hold her through the nights,</p>
+                <p class="poem-line">turn their ordinary moments</p>
+                <p class="poem-line">into something warm and bright.</p>
+                <div class="poem-break"></div>
+                <p class="poem-line">And if he had one final wish,</p>
+                <p class="poem-line">one thing he’d quietly pray,</p>
+                <p class="poem-line">it would be to leave before her,</p>
+                <p class="poem-line">when they had lived their days.</p>
+                <div class="poem-break"></div>
+                <p class="poem-line">Not because he loved life less,</p>
+                <p class="poem-line">but because he loved her so much that</p>
+                <p class="poem-line">he couldn't bear the thought of leaving</p>
+                <p class="poem-line">her alone when he must go.</p>
+                <div class="poem-break"></div>
+                <p class="poem-line">He wanted to spend his lifetime</p>
+                <p class="poem-line">giving her all he could,</p>
+                <div class="poem-break"></div>
+                <p class="poem-line">And when their hair had turned to silver,</p>
+                <p class="poem-line">when their hands were old and worn,</p>
+                <p class="poem-line">he'd still look into her eyes</p>
+                <p class="poem-line">and feel the love they'd sworn.</p>
+                <div class="poem-break"></div>
+                <p class="poem-line">All he ever wanted</p>
+                <p class="poem-line">was not forever alone,</p>
+                <p class="poem-line">but forever beside her,</p>
+                <p class="poem-line">until his final dawn.</p>
+                <div class="poem-break"></div>
+                <p class="poem-line">And if love could write their ending,</p>
+                <p class="poem-line">it would ask for nothing more:</p>
+                <p class="poem-close">just two hearts that chose each other, everytime when there are options.</p>
+            </div>
+        </div>
+    </aside>
 
     <aside class="hanging-note" id="hanging-note" aria-label="A quiet note for Jinsa">
         <div class="rope-rail" aria-hidden="true">
@@ -1780,14 +2047,29 @@
     <button type="button" class="music-toggle" id="music-toggle" aria-label="Mute music" title="Music on · tap to mute">♪</button>
 
     <script>
-        /* Access: localhost / early preview anytime; everyone else from 28 Sep 2026 00:01 London (BST) */
+        /* Access: localhost / early preview anytime.
+           Public visitors wait until 28 Sep 2026 00:01 London, then must verify Jinsa's number. */
         const UNLOCK_AT = new Date('2026-09-28T00:01:00+01:00');
         const PREVIEW_STORAGE_KEY = 'jinsa-bday-early-access';
         const PREVIEW_TOKEN = 'jinsa-early';
+        const PHONE_STORAGE_KEY = 'jinsa-bday-phone-ok';
+        const ALLOWED_PHONE_DIGITS = '447985236753';
 
         function isLocalDevHost() {
             const host = location.hostname;
             return host === 'localhost' || host === '127.0.0.1' || host === '::1' || location.protocol === 'file:';
+        }
+
+        function pageParams() {
+            return new URLSearchParams(location.search);
+        }
+
+        function forceWaitPreview() {
+            return pageParams().get('wait') === '1';
+        }
+
+        function forcePhonePreview() {
+            return pageParams().get('verify') === '1';
         }
 
         function hasPreviewAccess() {
@@ -1795,7 +2077,7 @@
                 if (localStorage.getItem(PREVIEW_STORAGE_KEY) === '1') return true;
             } catch (_) {}
 
-            const params = new URLSearchParams(location.search);
+            const params = pageParams();
             const early = params.get('early');
             if (early === PREVIEW_TOKEN || params.get('preview') === '1') {
                 try { localStorage.setItem(PREVIEW_STORAGE_KEY, '1'); } catch (_) {}
@@ -1809,17 +2091,43 @@
             try { localStorage.setItem(PREVIEW_STORAGE_KEY, '1'); } catch (_) {}
         }
 
-        function isSiteUnlocked() {
-            const params = new URLSearchParams(location.search);
-            // Force the countdown/timeline page for local preview: ?wait=1
-            if (params.get('wait') === '1') return false;
+        function hasPhoneAccess() {
+            try {
+                return localStorage.getItem(PHONE_STORAGE_KEY) === '1';
+            } catch (_) {
+                return false;
+            }
+        }
 
-            grantLocalPreview();
-            if (isLocalDevHost() || hasPreviewAccess()) return true;
+        function grantPhoneAccess() {
+            try { localStorage.setItem(PHONE_STORAGE_KEY, '1'); } catch (_) {}
+        }
+
+        function timeHasOpened() {
             return Date.now() >= UNLOCK_AT.getTime();
         }
 
-        let siteUnlocked = isSiteUnlocked();
+        function canSkipPhoneGate() {
+            if (forcePhonePreview()) return false;
+            grantLocalPreview();
+            return isLocalDevHost() || hasPreviewAccess();
+        }
+
+        function isSiteUnlocked() {
+            if (forceWaitPreview() || forcePhonePreview()) return false;
+            if (canSkipPhoneGate()) return true;
+            return timeHasOpened() && hasPhoneAccess();
+        }
+
+        function toPhoneDigits(dialCode, raw) {
+            let digits = String(raw || '').replace(/\D/g, '');
+            if (digits.startsWith('00')) digits = digits.slice(2);
+            if (digits.startsWith(dialCode)) return digits;
+            if (digits.startsWith('0')) digits = digits.slice(1);
+            return String(dialCode) + digits;
+        }
+
+        let siteUnlocked = false;
         let unlockTimer = null;
         let openExperienceReady = false;
         let onSiteUnlock = null;
@@ -1845,7 +2153,7 @@
 
         function revealSite() {
             siteUnlocked = true;
-            document.body.classList.remove('is-locked');
+            document.body.classList.remove('is-locked', 'is-verifying');
             document.body.classList.add('is-open');
             if (unlockTimer) {
                 clearInterval(unlockTimer);
@@ -1856,24 +2164,96 @@
             if (typeof onSiteUnlock === 'function') onSiteUnlock();
         }
 
+        function showPhoneGate() {
+            if (document.body.classList.contains('is-verifying') && !document.body.classList.contains('is-locked')) {
+                return;
+            }
+            siteUnlocked = false;
+            document.body.classList.remove('is-locked', 'is-open');
+            document.body.classList.add('is-verifying');
+            if (unlockTimer) {
+                clearInterval(unlockTimer);
+                unlockTimer = null;
+            }
+            if (typeof stopWaitTommy === 'function') stopWaitTommy();
+
+            const input = document.getElementById('phone-number');
+            if (input) {
+                setTimeout(() => input.focus(), 200);
+            }
+        }
+
         function lockSite() {
             siteUnlocked = false;
             document.body.classList.add('is-locked');
-            document.body.classList.remove('is-open');
+            document.body.classList.remove('is-open', 'is-verifying');
             updateCountdown();
             unlockTimer = setInterval(() => {
                 const remaining = updateCountdown();
-                if (remaining <= 0 || isSiteUnlocked()) {
+                if (forceWaitPreview()) return;
+                if (isSiteUnlocked()) {
                     revealSite();
+                    return;
+                }
+                if (remaining <= 0) {
+                    showPhoneGate();
                 }
             }, 1000);
         }
 
-        if (siteUnlocked) {
-            document.body.classList.remove('is-locked');
-            document.body.classList.add('is-open');
-        } else {
+        function applyAccessGate() {
+            if (forcePhonePreview()) {
+                showPhoneGate();
+                return;
+            }
+            if (isSiteUnlocked()) {
+                revealSite();
+                return;
+            }
+            if (!forceWaitPreview() && timeHasOpened() && !canSkipPhoneGate()) {
+                showPhoneGate();
+                return;
+            }
             lockSite();
+        }
+
+        function submitPhoneGate(e) {
+            if (e) e.preventDefault();
+            const country = document.getElementById('phone-country');
+            const number = document.getElementById('phone-number');
+            const error = document.getElementById('phone-error');
+            const digits = toPhoneDigits(country && country.value, number && number.value);
+            if (digits === ALLOWED_PHONE_DIGITS) {
+                if (error) error.hidden = true;
+                grantPhoneAccess();
+                revealSite();
+                if (typeof enableOpenExperience === 'function') enableOpenExperience();
+                return false;
+            }
+            if (error) error.hidden = false;
+            if (number) {
+                number.focus();
+                number.select();
+            }
+            return false;
+        }
+
+        const phoneFormEarly = document.getElementById('phone-form');
+        const phoneSubmit = document.getElementById('phone-submit');
+        const phoneInput = document.getElementById('phone-number');
+        if (phoneFormEarly) {
+            phoneFormEarly.addEventListener('submit', submitPhoneGate);
+        }
+        if (phoneSubmit) {
+            phoneSubmit.addEventListener('click', submitPhoneGate);
+        }
+        if (phoneInput) {
+            phoneInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    submitPhoneGate(e);
+                }
+            });
         }
 
         const questions = [
@@ -1982,6 +2362,7 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeHangingNote();
+                closeLeftHangingNote();
                 closeCoupon();
                 closeEggStage();
                 setMusicDuck(false);
@@ -2556,7 +2937,30 @@
         }
 
         function showHangingNote() {
-            document.getElementById('hanging-note').classList.add('visible');
+            document.getElementById('hanging-note')?.classList.add('visible');
+            document.getElementById('hanging-note-left')?.classList.add('visible');
+        }
+
+        function closeLeftHangingNote() {
+            const note = document.getElementById('hanging-note-left');
+            const panel = document.getElementById('hanging-panel-left');
+            const tab = document.getElementById('hanging-tab-left');
+            if (!note) return;
+            note.classList.remove('open');
+            if (panel) panel.hidden = true;
+            if (tab) tab.setAttribute('aria-expanded', 'false');
+        }
+
+        function openLeftHangingNote() {
+            const note = document.getElementById('hanging-note-left');
+            const panel = document.getElementById('hanging-panel-left');
+            const tab = document.getElementById('hanging-tab-left');
+            if (!note || !panel || !tab) return;
+
+            closeHangingNote();
+            note.classList.add('open');
+            panel.hidden = false;
+            tab.setAttribute('aria-expanded', 'true');
         }
 
         function openHangingNote() {
@@ -2566,6 +2970,7 @@
             const usVideo = document.getElementById('hanging-us-video');
             const bgVideo = document.getElementById('tommy-bg-video');
 
+            closeLeftHangingNote();
             note.classList.add('open');
             panel.hidden = false;
             tab.setAttribute('aria-expanded', 'true');
@@ -2609,6 +3014,8 @@
 
         document.getElementById('hanging-tab').addEventListener('click', openHangingNote);
         document.getElementById('hanging-close').addEventListener('click', closeHangingNote);
+        document.getElementById('hanging-tab-left').addEventListener('click', openLeftHangingNote);
+        document.getElementById('hanging-close-left').addEventListener('click', closeLeftHangingNote);
         document.getElementById('hanging-us-photo').addEventListener('click', () => {
             const usVideo = document.getElementById('hanging-us-video');
             if (!usVideo) return;
@@ -2752,8 +3159,29 @@
 
         renderWishes();
 
+        function enablePhoneExperience() {
+            musicEnabled = true;
+            ensureWaitMusic();
+            updateMusicButton();
+            const start = () => {
+                unlockAudioContext();
+                ensureDesiredMusic();
+                armMusicAutoplay();
+                updateMusicButton();
+            };
+            const gate = document.getElementById('phone-gate');
+            if (gate) {
+                gate.addEventListener('pointerdown', start);
+                gate.addEventListener('focusin', start);
+            }
+        }
+
+        applyAccessGate();
+
         if (siteUnlocked) {
             enableOpenExperience();
+        } else if (document.body.classList.contains('is-verifying')) {
+            enablePhoneExperience();
         } else {
             enableWaitExperience();
         }
